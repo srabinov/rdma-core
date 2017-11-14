@@ -1,6 +1,8 @@
 rdma_man_pages(
   ibv_alloc_mw.3
   ibv_alloc_pd.3
+  ibv_alloc_shpd.3
+  ibv_share_pd.3
   ibv_asyncwatch.1
   ibv_attach_mcast.3
   ibv_bind_mw.3

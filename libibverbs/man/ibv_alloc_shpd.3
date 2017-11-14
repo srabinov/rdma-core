@@ -1,0 +1,38 @@
+.\" -*- nroff -*-
+.\"
+.TH IBV_ALLOC_SHPD 3 2017-11-11 libibverbs "Libibverbs Programmer's Manual"
+.SH "NAME"
+ibv_alloc_shpd \- sharing a protection domain (PD) via file descriptor.
+.SH "SYNOPSIS"
+.nf
+.B #include <infiniband/verbs.h>
+.sp
+.BI "int ibv_alloc_shpd(struct ibv_pd " "*pd" ", uint64_t "share_key,
+.BI " " "                  " "uint32_t " "fd");
+.sp
+.fi
+.SH "DESCRIPTION"
+.B ibv_alloc_shpd()
+prepare the PD for sharing using the file descriptor. required for sharing the PD
+.I pd\fR with another process on same IB device.
+.I share_key
+and
+.I fd
+are 64 bit key and file descriptor which needs to be provided to
+.B ibv_share_pd()
+call by another process to share the same PD in that other process.
+sharing of file descriptor between 2 processes on same machine is out of
+the scope of this man.
+.SH "RETURN VALUE"
+.B ibv_alloc_shpd()
+returns 0 on success, or -1 if an error occurred (in which case, errno
+is set appropriately)..
+.SH "NOTES"
+.B ibv_alloc_shpd()
+can be called on a particular PD only once.
+file descriptor can share only one PD.
+.SH "SEE ALSO"
+.BR ibv_share_pd (3)
+.SH "AUTHORS"
+.TP
+Shamir Rabinovitch <shamir.rabinovitch@oracle.com>
