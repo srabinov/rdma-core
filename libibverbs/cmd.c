@@ -314,6 +314,42 @@ int ibv_cmd_alloc_pd(struct ibv_context *context, struct ibv_pd *pd,
 	return 0;
 }
 
+int ibv_cmd_alloc_shpd(struct ibv_pd *pd, uint64_t share_key, uint32_t fd,
+		       struct ibv_alloc_shpd *cmd, size_t cmd_size)
+{
+	IBV_INIT_CMD(cmd, cmd_size, ALLOC_SHPD);
+
+	cmd->pd_handle	= pd->handle;
+	cmd->share_key	= share_key;
+	cmd->fd		= fd;
+
+	if (write(pd->context->cmd_fd, cmd, cmd_size) != cmd_size)
+		return errno;
+
+	return 0;
+}
+
+int ibv_cmd_share_pd(struct ibv_context *context, struct ibv_pd *pd,
+		     uint64_t share_key, uint32_t fd,
+		     struct ibv_share_pd *cmd, size_t cmd_size,
+		     struct ibv_alloc_pd_resp *resp, size_t resp_size)
+{
+	IBV_INIT_CMD_RESP(cmd, cmd_size, SHARE_PD, resp, resp_size);
+
+	cmd->share_key	= share_key;
+	cmd->fd		= fd;
+
+	if (write(context->cmd_fd, cmd, cmd_size) != cmd_size)
+		return errno;
+
+	(void) VALGRIND_MAKE_MEM_DEFINED(resp, resp_size);
+
+	pd->handle  = resp->pd_handle;
+	pd->context = context;
+
+	return 0;
+}
+
 int ibv_cmd_dealloc_pd(struct ibv_pd *pd)
 {
 	struct ibv_dealloc_pd cmd;

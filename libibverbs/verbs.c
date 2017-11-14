@@ -213,6 +213,22 @@ LATEST_SYMVER_FUNC(ibv_alloc_pd, 1_1, "IBVERBS_1.1",
 	return pd;
 }
 
+LATEST_SYMVER_FUNC(ibv_alloc_shpd, 1_1, "IBVERBS_1.1",
+		   int,
+		   struct ibv_pd *pd, uint64_t share_key,
+		   uint32_t fd)
+{
+	return pd->context->ops.alloc_shpd(pd, share_key, fd);
+}
+
+LATEST_SYMVER_FUNC(ibv_share_pd, 1_1, "IBVERBS_1.1",
+		   struct ibv_pd *,
+		   struct ibv_context *context, uint64_t share_key,
+		   uint32_t fd)
+{
+	return context->ops.share_pd(context, share_key, fd);
+}
+
 LATEST_SYMVER_FUNC(ibv_dealloc_pd, 1_1, "IBVERBS_1.1",
 		   int,
 		   struct ibv_pd *pd)

@@ -240,6 +240,12 @@ int ibv_cmd_query_port(struct ibv_context *context, uint8_t port_num,
 int ibv_cmd_alloc_pd(struct ibv_context *context, struct ibv_pd *pd,
 		     struct ibv_alloc_pd *cmd, size_t cmd_size,
 		     struct ibv_alloc_pd_resp *resp, size_t resp_size);
+int ibv_cmd_alloc_shpd(struct ibv_pd *pd, uint64_t share_key, uint32_t fd,
+		       struct ibv_alloc_shpd *cmd, size_t cmd_size);
+int ibv_cmd_share_pd(struct ibv_context *context, struct ibv_pd *pd,
+		     uint64_t share_key, uint32_t fd,
+		     struct ibv_share_pd *cmd, size_t cmd_size,
+		     struct ibv_alloc_pd_resp *resp, size_t resp_size);
 int ibv_cmd_dealloc_pd(struct ibv_pd *pd);
 int ibv_cmd_open_xrcd(struct ibv_context *context, struct verbs_xrcd *xrcd,
 		      int vxrcd_size,

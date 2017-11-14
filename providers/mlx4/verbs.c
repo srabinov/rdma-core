@@ -213,6 +213,36 @@ struct ibv_pd *mlx4_alloc_pd(struct ibv_context *context)
 	return &pd->ibv_pd;
 }
 
+int mlx4_alloc_shpd(struct ibv_pd *pd, uint64_t share_key, uint32_t fd)
+{
+	struct ibv_alloc_shpd cmd = {0};
+
+	return ibv_cmd_alloc_shpd(pd, share_key, fd, &cmd, sizeof(cmd));
+}
+
+struct ibv_pd *mlx4_share_pd(struct ibv_context *context, uint64_t share_key,
+			     uint32_t fd)
+{
+	struct ibv_share_pd		 cmd = {0};
+	struct mlx4_alloc_pd_resp	 resp = {{0}, 0};
+	struct mlx4_pd			*pd;
+
+	pd = malloc(sizeof(*pd));
+	if (!pd)
+		return NULL;
+
+	if (ibv_cmd_share_pd(context, &pd->ibv_pd, share_key, fd,
+			     &cmd, sizeof(cmd),
+			     &resp.ibv_resp, sizeof(resp))) {
+		free(pd);
+		return NULL;
+	}
+
+	pd->pdn = resp.pdn;
+
+	return &pd->ibv_pd;
+}
+
 int mlx4_free_pd(struct ibv_pd *pd)
 {
 	int ret;

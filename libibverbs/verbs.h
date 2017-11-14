@@ -1569,6 +1569,10 @@ struct ibv_context_ops {
 	int			(*detach_mcast)(struct ibv_qp *qp, const union ibv_gid *gid,
 						uint16_t lid);
 	void			(*async_event)(struct ibv_async_event *event);
+	int			(*alloc_shpd)(struct ibv_pd *pd,
+					      uint64_t share_key, uint32_t fd);
+	struct ibv_pd *		(*share_pd)(struct ibv_context *context,
+					    uint64_t share_key, uint32_t fd);
 };
 
 struct ibv_context {
@@ -1796,6 +1800,17 @@ int ibv_query_pkey(struct ibv_context *context, uint8_t port_num,
  * ibv_alloc_pd - Allocate a protection domain
  */
 struct ibv_pd *ibv_alloc_pd(struct ibv_context *context);
+
+/**
+ * ibv_alloc_shpd - Mark a pd as shareable
+ */
+int ibv_alloc_shpd(struct ibv_pd *pd, uint64_t share_key, uint32_t fd);
+
+/**
+ * ibv_share_pd - allocate a process private pd from shared pd
+ */
+struct ibv_pd *ibv_share_pd(struct ibv_context *context, uint64_t share_key,
+			    uint32_t fd);
 
 /**
  * ibv_dealloc_pd - Free a protection domain

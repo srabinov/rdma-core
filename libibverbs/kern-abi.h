@@ -91,7 +91,9 @@ enum {
 	IB_USER_VERBS_CMD_OPEN_XRCD,
 	IB_USER_VERBS_CMD_CLOSE_XRCD,
 	IB_USER_VERBS_CMD_CREATE_XSRQ,
-	IB_USER_VERBS_CMD_OPEN_QP
+	IB_USER_VERBS_CMD_OPEN_QP,
+	IB_USER_VERBS_CMD_ALLOC_SHPD,
+	IB_USER_VERBS_CMD_SHARE_PD,
 };
 
 #define IB_USER_VERBS_CMD_COMMAND_MASK		0xff
@@ -347,6 +349,26 @@ struct ibv_alloc_pd {
 
 struct ibv_alloc_pd_resp {
 	__u32 pd_handle;
+};
+
+struct ibv_alloc_shpd {
+	__u32 command;
+	__u16 in_words;
+	__u16 out_words;
+	__u64 response;
+	__u32 pd_handle;
+	__u64 share_key;
+	__u32 fd;
+	__u64 driver_data[0];
+};
+
+struct ibv_share_pd {
+	__u32 command;
+	__u16 in_words;
+	__u16 out_words;
+	__u64 response;
+	__u64 share_key;
+	__u32 fd;
 };
 
 struct ibv_dealloc_pd {
@@ -1244,6 +1266,8 @@ enum {
 	IB_USER_VERBS_CMD_CREATE_RWQ_IND_TBL_V2 = -1,
 	IB_USER_VERBS_CMD_DESTROY_RWQ_IND_TBL_V2 = -1,
 	IB_USER_VERBS_CMD_MODIFY_QP_EX_V2 = -1,
+	IB_USER_VERBS_CMD_ALLOC_SHPD_V2 = -1,
+	IB_USER_VERBS_CMD_SHARE_PD_V2 = -1,
 };
 
 struct ibv_modify_srq_v3 {

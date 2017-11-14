@@ -91,6 +91,8 @@ IBVERBS_PRIVATE_@IBVERBS_PABI_VERSION@ {
 		/* These historical symbols are now private to libibverbs */
 		ibv_cmd_alloc_mw;
 		ibv_cmd_alloc_pd;
+		ibv_cmd_alloc_shpd;
+		ibv_cmd_share_pd;
 		ibv_cmd_attach_mcast;
 		ibv_cmd_close_xrcd;
 		ibv_cmd_create_ah;
