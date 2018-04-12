@@ -537,6 +537,11 @@ struct ibv_mw_bind_info {
 	unsigned int	 mw_access_flags; /* use ibv_access_flags */
 };
 
+struct ibv_export {
+	int			fd;
+	uint32_t		handle;
+};
+
 struct ibv_pd {
 	struct ibv_context     *context;
 	uint32_t		handle;
@@ -1721,6 +1726,11 @@ static inline struct verbs_context *verbs_get_ctx(struct ibv_context *ctx)
 						 context));
 }
 
+static inline int verbs_ctx_to_fd(struct ibv_context *ctx)
+{
+	return ctx->cmd_fd;
+}
+
 #define verbs_get_ctx_op(ctx, op) ({ \
 	struct verbs_context *__vctx = verbs_get_ctx(ctx); \
 	(!__vctx || (__vctx->sz < sizeof(*__vctx) - offsetof(struct verbs_context, op)) || \
@@ -1765,6 +1775,23 @@ struct ibv_context *ibv_open_device(struct ibv_device *device);
  * ibv_close_device - Release device
  */
 int ibv_close_device(struct ibv_context *context);
+
+
+enum uverbs_default_objects;
+
+/**
+ * ibv_export_to_fd - Export uverbs object to another ib_ucontext
+ * @fd: File descriptor of the target ib_ucontext
+ * @handle: Handle of the ib_uobject with in current context
+ * @type: Type of the object we try to export.
+ *	Used to verify the @handle.
+ * @export: Place holder for the response if successful
+ */
+int ibv_export_to_fd(struct ibv_context *context,
+		     int fd,
+		     uint32_t handle,
+		     enum uverbs_default_objects type,
+		     struct ibv_export *export);
 
 /**
  * ibv_get_async_event - Get next async event
