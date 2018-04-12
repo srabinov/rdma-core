@@ -55,6 +55,7 @@ static const struct verbs_context_ops pvrdma_ctx_ops = {
 	.query_device = pvrdma_query_device,
 	.query_port = pvrdma_query_port,
 	.alloc_pd = pvrdma_alloc_pd,
+	.import_pd = pvrdma_import_pd,
 	.dealloc_pd = pvrdma_free_pd,
 
 	.reg_mr = pvrdma_reg_mr,

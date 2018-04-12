@@ -93,7 +93,8 @@ static int rxe_query_port(struct ibv_context *context, uint8_t port,
 	return ibv_cmd_query_port(context, port, attr, &cmd, sizeof cmd);
 }
 
-static struct ibv_pd *rxe_alloc_pd(struct ibv_context *context)
+static struct ibv_pd *rxe_import_pd(struct ibv_context *context, uint8_t import,
+				    uint32_t fd, uint32_t pd_handle)
 {
 	struct ibv_alloc_pd cmd;
 	struct ib_uverbs_alloc_pd_resp resp;
@@ -103,12 +104,19 @@ static struct ibv_pd *rxe_alloc_pd(struct ibv_context *context)
 	if (!pd)
 		return NULL;
 
-	if (ibv_cmd_alloc_pd(context, pd, &cmd, sizeof cmd, &resp, sizeof resp)) {
+	if (ibv_cmd_alloc_pd(context, pd, &cmd, sizeof(cmd), &resp,
+			     sizeof(resp), import, fd, pd_handle)) {
 		free(pd);
 		return NULL;
 	}
 
 	return pd;
+}
+
+static struct ibv_pd *rxe_alloc_pd(struct ibv_context *context)
+{
+	return rxe_import_pd(context, VERBS_IMPORT_OFF, VERBS_NULL_FD,
+			     VERBS_NULL_PD);
 }
 
 static int rxe_dealloc_pd(struct ibv_pd *pd)
@@ -830,6 +838,7 @@ static const struct verbs_context_ops rxe_ctx_ops = {
 	.query_device = rxe_query_device,
 	.query_port = rxe_query_port,
 	.alloc_pd = rxe_alloc_pd,
+	.import_pd = rxe_import_pd,
 	.dealloc_pd = rxe_dealloc_pd,
 	.reg_mr = rxe_reg_mr,
 	.dereg_mr = rxe_dereg_mr,

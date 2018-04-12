@@ -268,6 +268,8 @@ void ocrdma_init_ahid_tbl(struct ocrdma_devctx *ctx);
 int ocrdma_query_device(struct ibv_context *, struct ibv_device_attr *);
 int ocrdma_query_port(struct ibv_context *, uint8_t, struct ibv_port_attr *);
 struct ibv_pd *ocrdma_alloc_pd(struct ibv_context *);
+struct ibv_pd *ocrdma_import_pd(struct ibv_context *, uint8_t, uint32_t,
+				uint32_t);
 int ocrdma_free_pd(struct ibv_pd *);
 struct ibv_mr *ocrdma_reg_mr(struct ibv_pd *, void *, size_t,
 			     int ibv_access_flags);

@@ -322,6 +322,10 @@ int mlx4_query_port(struct ibv_context *context, uint8_t port,
 int mlx4_query_rt_values(struct ibv_context *context,
 			 struct ibv_values_ex *values);
 struct ibv_pd *mlx4_alloc_pd(struct ibv_context *context);
+struct ibv_pd *mlx4_import_pd(struct ibv_context *context,
+			      uint8_t import,
+			      uint32_t fd,
+			      uint32_t pd_handle);
 int mlx4_free_pd(struct ibv_pd *pd);
 struct ibv_xrcd *mlx4_open_xrcd(struct ibv_context *context,
 				struct ibv_xrcd_init_attr *attr);

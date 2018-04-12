@@ -95,6 +95,7 @@ static const struct verbs_context_ops i40iw_uctx_ops = {
 	.query_device	= i40iw_uquery_device,
 	.query_port	= i40iw_uquery_port,
 	.alloc_pd	= i40iw_ualloc_pd,
+	.import_pd	= i40iw_uimport_pd,
 	.dealloc_pd	= i40iw_ufree_pd,
 	.reg_mr		= i40iw_ureg_mr,
 	.dereg_mr	= i40iw_udereg_mr,

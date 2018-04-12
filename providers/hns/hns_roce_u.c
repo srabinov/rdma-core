@@ -116,6 +116,7 @@ static struct verbs_context *hns_roce_alloc_context(struct ibv_device *ibdev,
 	context->ibv_ctx.context.ops.query_device  = hns_roce_u_query_device;
 	context->ibv_ctx.context.ops.query_port    = hns_roce_u_query_port;
 	context->ibv_ctx.context.ops.alloc_pd	   = hns_roce_u_alloc_pd;
+	context->ibv_ctx.context.ops.import_pd	   = hns_roce_u_import_pd;
 	context->ibv_ctx.context.ops.dealloc_pd    = hns_roce_u_free_pd;
 	context->ibv_ctx.context.ops.reg_mr	   = hns_roce_u_reg_mr;
 	context->ibv_ctx.context.ops.rereg_mr	   = hns_roce_u_rereg_mr;
