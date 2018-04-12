@@ -43,6 +43,7 @@
 
 #include "ibverbs.h"
 #include <ccan/minmax.h>
+#include <rdma/ib_user_ioctl_cmds.h>
 
 int ibv_cmd_get_context(struct verbs_context *context_ex,
 			struct ibv_get_context *cmd, size_t cmd_size,
@@ -105,6 +106,34 @@ static void copy_query_dev_fields(struct ibv_device_attr *device_attr,
 	device_attr->max_pkeys			= resp->max_pkeys;
 	device_attr->local_ca_ack_delay		= resp->local_ca_ack_delay;
 	device_attr->phys_port_cnt		= resp->phys_port_cnt;
+}
+
+int ibv_cmd_export_to_fd(struct ibv_context *context,
+			 int fd,
+			 uint32_t handle,
+			 enum uverbs_default_objects type,
+			 struct ibv_export *export)
+{
+	struct ibv_export_to_fd cmd = { {0} };
+	struct ib_uverbs_export_to_fd_resp resp;
+
+	IBV_INIT_CMD_RESP(&cmd, sizeof(cmd), EXPORT_TO_FD, &resp,
+			  sizeof(resp));
+	cmd.fd     = fd;
+	cmd.handle = handle;
+	cmd.type   = type;
+
+	if (write(context->cmd_fd, &cmd, sizeof(cmd)) != sizeof(cmd))
+		return errno;
+
+	(void) VALGRIND_MAKE_MEM_DEFINED(&resp, sizeof(resp));
+
+	memset(export, 0, sizeof(*export));
+
+	export->fd     = fd;
+	export->handle = resp.handle;
+
+	return 0;
 }
 
 int ibv_cmd_query_device(struct ibv_context *context,
