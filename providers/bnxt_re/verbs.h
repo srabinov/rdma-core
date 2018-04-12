@@ -59,6 +59,8 @@ int bnxt_re_query_device(struct ibv_context *uctx,
 			 struct ibv_device_attr *attr);
 int bnxt_re_query_port(struct ibv_context *uctx, uint8_t port,
 		       struct ibv_port_attr *attr);
+struct ibv_pd *bnxt_re_import_pd(struct ibv_context *uctx, uint8_t import,
+				 uint32_t fd, uint32_t pd_handle);
 struct ibv_pd *bnxt_re_alloc_pd(struct ibv_context *uctx);
 int bnxt_re_free_pd(struct ibv_pd *ibvpd);
 struct ibv_mr *bnxt_re_reg_mr(struct ibv_pd *ibvpd, void *buf, size_t len,

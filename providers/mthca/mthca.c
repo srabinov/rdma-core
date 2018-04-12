@@ -93,6 +93,7 @@ static const struct verbs_context_ops mthca_ctx_common_ops = {
 	.query_device  = mthca_query_device,
 	.query_port    = mthca_query_port,
 	.alloc_pd      = mthca_alloc_pd,
+	.import_pd     = mthca_import_pd,
 	.dealloc_pd    = mthca_free_pd,
 	.reg_mr        = mthca_reg_mr,
 	.dereg_mr      = mthca_dereg_mr,

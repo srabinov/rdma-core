@@ -90,6 +90,7 @@ static const struct verbs_context_ops hfi1_ctx_common_ops = {
 	.query_port	= hfi1_query_port,
 
 	.alloc_pd	= hfi1_alloc_pd,
+	.import_pd	= hfi1_import_pd,
 	.dealloc_pd	= hfi1_free_pd,
 
 	.reg_mr		= hfi1_reg_mr,
