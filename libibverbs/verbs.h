@@ -1672,6 +1672,9 @@ struct ibv_context_ops {
 	int			(*query_port)(struct ibv_context *context, uint8_t port_num,
 					      struct ibv_port_attr *port_attr);
 	struct ibv_pd *		(*alloc_pd)(struct ibv_context *context);
+	struct ibv_pd *		(*import_pd)(struct ibv_context *context,
+					     uint8_t import, uint32_t fd,
+					     uint32_t pd_handle);
 	int			(*dealloc_pd)(struct ibv_pd *pd);
 	struct ibv_mr *		(*reg_mr)(struct ibv_pd *pd, void *addr, size_t length,
 					  int access);
@@ -2017,6 +2020,13 @@ int ibv_query_pkey(struct ibv_context *context, uint8_t port_num,
  * ibv_alloc_pd - Allocate a protection domain
  */
 struct ibv_pd *ibv_alloc_pd(struct ibv_context *context);
+
+/**
+ * ibv_import_pd - Import a protection domain from fd
+ */
+struct ibv_pd *ibv_import_pd(struct ibv_context *context,
+			     uint32_t fd,
+			     uint32_t pd_handle);
 
 /**
  * ibv_dealloc_pd - Free a protection domain

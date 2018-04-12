@@ -344,9 +344,14 @@ int ibv_cmd_query_port(struct ibv_context *context, uint8_t port_num,
 
 int ibv_cmd_alloc_pd(struct ibv_context *context, struct ibv_pd *pd,
 		     struct ibv_alloc_pd *cmd, size_t cmd_size,
-		     struct ib_uverbs_alloc_pd_resp *resp, size_t resp_size)
+		     struct ib_uverbs_alloc_pd_resp *resp, size_t resp_size,
+		     uint8_t import, uint32_t fd, uint32_t pd_handle)
 {
 	IBV_INIT_CMD_RESP(cmd, cmd_size, ALLOC_PD, resp, resp_size);
+
+	cmd->import    = import;
+	cmd->fd        = fd;
+	cmd->pd_handle = pd_handle;
 
 	if (write(context->cmd_fd, cmd, cmd_size) != cmd_size)
 		return errno;

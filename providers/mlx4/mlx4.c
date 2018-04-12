@@ -85,6 +85,7 @@ static const struct verbs_context_ops mlx4_ctx_ops = {
 	.query_device  = mlx4_query_device,
 	.query_port    = mlx4_query_port,
 	.alloc_pd      = mlx4_alloc_pd,
+	.import_pd     = mlx4_import_pd,
 	.dealloc_pd    = mlx4_free_pd,
 	.reg_mr	       = mlx4_reg_mr,
 	.rereg_mr      = mlx4_rereg_mr,

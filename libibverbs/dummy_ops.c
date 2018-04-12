@@ -54,6 +54,13 @@ alloc_parent_domain(struct ibv_context *context,
 	return NULL;
 }
 
+static struct ibv_pd *import_pd(struct ibv_context *context, uint8_t import,
+				uint32_t fd, uint32_t pd_handle)
+{
+	errno = ENOSYS;
+	return NULL;
+}
+
 static struct ibv_pd *alloc_pd(struct ibv_context *context)
 {
 	errno = ENOSYS;
@@ -433,6 +440,7 @@ const struct verbs_context_ops verbs_dummy_ops = {
 	alloc_dm,
 	alloc_mw,
 	alloc_parent_domain,
+	import_pd,
 	alloc_pd,
 	alloc_td,
 	async_event,
@@ -521,6 +529,7 @@ void verbs_set_ops(struct verbs_context *vctx,
 	SET_OP(vctx, alloc_dm);
 	SET_OP(ctx, alloc_mw);
 	SET_OP(ctx, alloc_pd);
+	SET_OP(ctx, import_pd);
 	SET_OP(vctx, alloc_parent_domain);
 	SET_OP(vctx, alloc_td);
 	SET_OP(ctx, async_event);

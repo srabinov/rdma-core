@@ -67,6 +67,7 @@ static const struct verbs_context_ops nes_uctx_ops = {
 	.query_device = nes_uquery_device,
 	.query_port = nes_uquery_port,
 	.alloc_pd = nes_ualloc_pd,
+	.import_pd = nes_uimport_pd,
 	.dealloc_pd = nes_ufree_pd,
 	.reg_mr = nes_ureg_mr,
 	.dereg_mr = nes_udereg_mr,

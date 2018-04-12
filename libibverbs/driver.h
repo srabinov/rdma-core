@@ -47,6 +47,13 @@
 
 struct verbs_device;
 
+enum {
+	VERBS_NULL_PD		= (uint32_t)(-1),
+	VERBS_NULL_FD		= (uint32_t)(-1),
+	VERBS_IMPORT_OFF	= 0,
+	VERBS_IMPORT_ON		= 1,
+};
+
 enum verbs_xrcd_mask {
 	VERBS_XRCD_HANDLE	= 1 << 0,
 	VERBS_XRCD_RESERVED	= 1 << 1
@@ -207,6 +214,8 @@ struct verbs_context_ops {
 	struct ibv_pd *(*alloc_parent_domain)(
 		struct ibv_context *context,
 		struct ibv_parent_domain_init_attr *attr);
+	struct ibv_pd *(*import_pd)(struct ibv_context *uctx, uint8_t import,
+				    uint32_t fd, uint32_t pd_handle);
 	struct ibv_pd *(*alloc_pd)(struct ibv_context *context);
 	struct ibv_td *(*alloc_td)(struct ibv_context *context,
 				   struct ibv_td_init_attr *init_attr);
@@ -401,7 +410,8 @@ int ibv_cmd_query_port(struct ibv_context *context, uint8_t port_num,
 		       struct ibv_query_port *cmd, size_t cmd_size);
 int ibv_cmd_alloc_pd(struct ibv_context *context, struct ibv_pd *pd,
 		     struct ibv_alloc_pd *cmd, size_t cmd_size,
-		     struct ib_uverbs_alloc_pd_resp *resp, size_t resp_size);
+		     struct ib_uverbs_alloc_pd_resp *resp, size_t resp_size,
+		     uint8_t import, uint32_t fd, uint32_t pd_handle);
 int ibv_cmd_dealloc_pd(struct ibv_pd *pd);
 int ibv_cmd_open_xrcd(struct ibv_context *context, struct verbs_xrcd *xrcd,
 		      int vxrcd_size,

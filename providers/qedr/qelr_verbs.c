@@ -111,7 +111,8 @@ int qelr_query_port(struct ibv_context *context, uint8_t port,
 	return status;
 }
 
-struct ibv_pd *qelr_alloc_pd(struct ibv_context *context)
+struct ibv_pd *qelr_import_pd(struct ibv_context *context, uint8_t import,
+			      uint32_t fd, uint32_t pd_handle)
 {
 	struct qelr_alloc_pd cmd;
 	struct qelr_alloc_pd_resp resp;
@@ -126,7 +127,8 @@ struct ibv_pd *qelr_alloc_pd(struct ibv_context *context)
 	memset(&cmd, 0, sizeof(cmd));
 
 	if (ibv_cmd_alloc_pd(context, &pd->ibv_pd, &cmd.ibv_cmd, sizeof(cmd),
-			     &resp.ibv_resp, sizeof(resp))) {
+			     &resp.ibv_resp, sizeof(resp), import, fd,
+			     pd_handle)) {
 		free(pd);
 		return NULL;
 	}
@@ -136,6 +138,12 @@ struct ibv_pd *qelr_alloc_pd(struct ibv_context *context)
 	DP_VERBOSE(cxt->dbg_fp, QELR_MSG_INIT, "Allocated pd: %d\n", pd->pd_id);
 
 	return &pd->ibv_pd;
+}
+
+struct ibv_pd *qelr_alloc_pd(struct ibv_context *context)
+{
+	return qelr_import_pd(context, VERBS_IMPORT_OFF, VERBS_NULL_FD,
+			      VERBS_NULL_PD);
 }
 
 int qelr_dealloc_pd(struct ibv_pd *ibpd)

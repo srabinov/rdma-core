@@ -79,6 +79,7 @@ static const struct verbs_context_ops iwch_ctx_common_ops = {
 	.query_device = iwch_query_device,
 	.query_port = iwch_query_port,
 	.alloc_pd = iwch_alloc_pd,
+	.import_pd = iwch_import_pd,
 	.dealloc_pd = iwch_free_pd,
 	.reg_mr = iwch_reg_mr,
 	.dereg_mr = iwch_dereg_mr,

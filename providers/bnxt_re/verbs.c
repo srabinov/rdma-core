@@ -78,7 +78,8 @@ int bnxt_re_query_port(struct ibv_context *ibvctx, uint8_t port,
 	return ibv_cmd_query_port(ibvctx, port, port_attr, &cmd, sizeof(cmd));
 }
 
-struct ibv_pd *bnxt_re_alloc_pd(struct ibv_context *ibvctx)
+struct ibv_pd *bnxt_re_import_pd(struct ibv_context *ibvctx, uint8_t import,
+				 uint32_t fd, uint32_t pd_handle)
 {
 	struct ibv_alloc_pd cmd;
 	struct ubnxt_re_pd_resp resp;
@@ -93,7 +94,8 @@ struct ibv_pd *bnxt_re_alloc_pd(struct ibv_context *ibvctx)
 
 	memset(&resp, 0, sizeof(resp));
 	if (ibv_cmd_alloc_pd(ibvctx, &pd->ibvpd, &cmd, sizeof(cmd),
-			     &resp.ibv_resp, sizeof(resp)))
+			     &resp.ibv_resp, sizeof(resp), import, fd,
+			     pd_handle))
 		goto out;
 
 	pd->pdid = resp.pdid;
@@ -118,6 +120,12 @@ struct ibv_pd *bnxt_re_alloc_pd(struct ibv_context *ibvctx)
 out:
 	free(pd);
 	return NULL;
+}
+
+struct ibv_pd *bnxt_re_alloc_pd(struct ibv_context *ibvctx)
+{
+	return bnxt_re_import_pd(ibvctx, VERBS_IMPORT_OFF, VERBS_NULL_PD,
+				 VERBS_NULL_FD);
 }
 
 int bnxt_re_free_pd(struct ibv_pd *ibvpd)

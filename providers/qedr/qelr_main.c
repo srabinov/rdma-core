@@ -84,6 +84,7 @@ static const struct verbs_context_ops qelr_ctx_ops = {
 	.query_device = qelr_query_device,
 	.query_port = qelr_query_port,
 	.alloc_pd = qelr_alloc_pd,
+	.import_pd = qelr_import_pd,
 	.dealloc_pd = qelr_dealloc_pd,
 	.reg_mr = qelr_reg_mr,
 	.dereg_mr = qelr_dereg_mr,
