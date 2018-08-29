@@ -386,6 +386,11 @@ void verbs_init_cq(struct ibv_cq *cq, struct ibv_context *context,
 int ibv_cmd_get_context(struct verbs_context *context,
 			struct ibv_get_context *cmd, size_t cmd_size,
 			struct ib_uverbs_get_context_resp *resp, size_t resp_size);
+int ibv_cmd_export_to_fd(struct ibv_context *src_context,
+			 int fd,
+			 uint32_t handle,
+			 enum uverbs_default_objects type,
+			 struct ibv_export *export);
 int ibv_cmd_query_device(struct ibv_context *context,
 			 struct ibv_device_attr *device_attr,
 			 uint64_t *raw_fw_ver,

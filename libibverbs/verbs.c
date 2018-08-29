@@ -54,6 +54,8 @@
 #include "neigh.h"
 #endif
 
+#include <rdma/ib_user_ioctl_cmds.h>
+
 #undef ibv_query_port
 
 int __attribute__((const)) ibv_rate_to_mult(enum ibv_rate rate)
@@ -134,6 +136,17 @@ enum ibv_rate __attribute__((const)) mbps_to_ibv_rate(int mbps)
 	case 309375: return IBV_RATE_300_GBPS;
 	default:     return IBV_RATE_MAX;
 	}
+}
+
+LATEST_SYMVER_FUNC(ibv_export_to_fd, 1_1, "IBVERBS_1.1",
+		   int,
+		   struct ibv_context *context,
+		   int fd,
+		   uint32_t handle,
+		   enum uverbs_default_objects type,
+		   struct ibv_export *export)
+{
+	return ibv_cmd_export_to_fd(context, fd, handle, type, export);
 }
 
 LATEST_SYMVER_FUNC(ibv_query_device, 1_1, "IBVERBS_1.1",
