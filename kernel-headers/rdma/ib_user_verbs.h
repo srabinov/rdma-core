@@ -318,6 +318,10 @@ struct ib_uverbs_export_to_fd_resp {
 
 struct ib_uverbs_alloc_pd {
 	__aligned_u64 response;
+	__u32 fd;
+	__u32 pd_handle;
+	__u8  import;
+	__u8  reserve[7];
 	__aligned_u64 driver_data[0];
 };
 

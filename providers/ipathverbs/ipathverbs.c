@@ -89,6 +89,7 @@ static const struct verbs_context_ops ipath_ctx_common_ops = {
 	.query_port	= ipath_query_port,
 
 	.alloc_pd	= ipath_alloc_pd,
+	.import_pd	= ipath_import_pd,
 	.dealloc_pd	= ipath_free_pd,
 
 	.reg_mr		= ipath_reg_mr,

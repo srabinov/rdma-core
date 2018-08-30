@@ -75,6 +75,7 @@ static const struct verbs_context_ops  c4iw_ctx_common_ops = {
 	.query_device = c4iw_query_device,
 	.query_port = c4iw_query_port,
 	.alloc_pd = c4iw_alloc_pd,
+	.import_pd = c4iw_import_pd,
 	.dealloc_pd = c4iw_free_pd,
 	.reg_mr = c4iw_reg_mr,
 	.dereg_mr = c4iw_dereg_mr,

@@ -131,7 +131,8 @@ static void ocrdma_free_ah_tbl_id(struct ocrdma_devctx *ctx, int idx)
 /*
  * ocrdma_alloc_pd
  */
-struct ibv_pd *ocrdma_alloc_pd(struct ibv_context *context)
+struct ibv_pd *ocrdma_import_pd(struct ibv_context *context, uint8_t import,
+				uint32_t fd, uint32_t pd_handle)
 {
 	struct uocrdma_alloc_pd cmd;
 	struct uocrdma_alloc_pd_resp resp;
@@ -145,7 +146,8 @@ struct ibv_pd *ocrdma_alloc_pd(struct ibv_context *context)
 	memset(&cmd, 0, sizeof(cmd));
 
 	if (ibv_cmd_alloc_pd(context, &pd->ibv_pd, &cmd.ibv_cmd, sizeof(cmd),
-			     &resp.ibv_resp, sizeof(resp))) {
+			     &resp.ibv_resp, sizeof(resp), import, fd,
+			     pd_handle)) {
 		free(pd);
 		return NULL;
 	}
@@ -163,6 +165,12 @@ struct ibv_pd *ocrdma_alloc_pd(struct ibv_context *context)
 		}
 	}
 	return &pd->ibv_pd;
+}
+
+struct ibv_pd *ocrdma_alloc_pd(struct ibv_context *context)
+{
+	return ocrdma_import_pd(context, VERBS_IMPORT_OFF, VERBS_NULL_FD,
+				VERBS_NULL_PD);
 }
 
 /*

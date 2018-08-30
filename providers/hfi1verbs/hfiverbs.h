@@ -201,6 +201,8 @@ extern int hfi1_query_port(struct ibv_context *context, uint8_t port,
 			    struct ibv_port_attr *attr);
 
 struct ibv_pd *hfi1_alloc_pd(struct ibv_context *pd);
+struct ibv_pd *hfi1_import_pd(struct ibv_context *pd, uint8_t import,
+			      uint32_t fd, uint32_t pd_handle);
 
 int hfi1_free_pd(struct ibv_pd *pd);
 

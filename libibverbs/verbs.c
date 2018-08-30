@@ -242,6 +242,22 @@ LATEST_SYMVER_FUNC(ibv_alloc_pd, 1_1, "IBVERBS_1.1",
 	return pd;
 }
 
+LATEST_SYMVER_FUNC(ibv_import_pd, 1_1, "IBVERBS_1.1",
+		   struct ibv_pd *,
+		   struct ibv_context *context,
+		   uint32_t fd,
+		   uint32_t pd_handle)
+{
+	struct ibv_pd *pd;
+
+	pd = get_ops(context)->import_pd(context, VERBS_IMPORT_ON, fd, pd_handle);
+	if (pd)
+		pd->context = context;
+
+	return pd;
+}
+
+
 LATEST_SYMVER_FUNC(ibv_dealloc_pd, 1_1, "IBVERBS_1.1",
 		   int,
 		   struct ibv_pd *pd)

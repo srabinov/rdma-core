@@ -46,6 +46,10 @@ int qelr_query_port(struct ibv_context *context, uint8_t port,
 		    struct ibv_port_attr *attr);
 
 struct ibv_pd *qelr_alloc_pd(struct ibv_context *context);
+struct ibv_pd *qelr_import_pd(struct ibv_context *context,
+			      uint8_t import,
+			      uint32_t fd,
+			      uint32_t pd_handle);
 int qelr_dealloc_pd(struct ibv_pd *ibpd);
 
 struct ibv_mr *qelr_reg_mr(struct ibv_pd *ibpd, void *addr,

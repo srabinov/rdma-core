@@ -85,7 +85,8 @@ int hns_roce_u_query_port(struct ibv_context *context, uint8_t port,
 	return ibv_cmd_query_port(context, port, attr, &cmd, sizeof(cmd));
 }
 
-struct ibv_pd *hns_roce_u_alloc_pd(struct ibv_context *context)
+struct ibv_pd *hns_roce_u_import_pd(struct ibv_context *context, uint8_t import,
+				    uint32_t fd, uint32_t pd_handle)
 {
 	struct ibv_alloc_pd cmd;
 	struct hns_roce_pd *pd;
@@ -96,7 +97,8 @@ struct ibv_pd *hns_roce_u_alloc_pd(struct ibv_context *context)
 		return NULL;
 
 	if (ibv_cmd_alloc_pd(context, &pd->ibv_pd, &cmd, sizeof(cmd),
-			     &resp.ibv_resp, sizeof(resp))) {
+			     &resp.ibv_resp, sizeof(resp), import, fd,
+			     pd_handle)) {
 		free(pd);
 		return NULL;
 	}
@@ -104,6 +106,12 @@ struct ibv_pd *hns_roce_u_alloc_pd(struct ibv_context *context)
 	pd->pdn = resp.pdn;
 
 	return &pd->ibv_pd;
+}
+
+struct ibv_pd *hns_roce_u_alloc_pd(struct ibv_context *context)
+{
+	return hns_roce_u_import_pd(context, VERBS_IMPORT_OFF, VERBS_NULL_FD,
+				    VERBS_NULL_PD);
 }
 
 int hns_roce_u_free_pd(struct ibv_pd *pd)

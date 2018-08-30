@@ -102,6 +102,8 @@ IBVERBS_1.1 {
 		mbps_to_ibv_rate;
 		ibv_export_to_fd;
 
+		ibv_import_pd;
+
 		/* These historical symbols are now private to libibverbs, but used by
 		   other rdma-core libraries. Do not change them. */
 		ibv_copy_ah_attr_from_kern;

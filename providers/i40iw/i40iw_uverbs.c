@@ -93,7 +93,8 @@ int i40iw_uquery_port(struct ibv_context *context, uint8_t port, struct ibv_port
  * i40iw_ualloc_pd - allocates protection domain and return pd ptr
  * @context: user context of the device
  **/
-struct ibv_pd *i40iw_ualloc_pd(struct ibv_context *context)
+struct ibv_pd *i40iw_uimport_pd(struct ibv_context *context, uint8_t import,
+				uint32_t fd, uint32_t pd_handle)
 {
 	struct ibv_alloc_pd cmd;
 	struct i40iw_ualloc_pd_resp resp;
@@ -104,7 +105,9 @@ struct ibv_pd *i40iw_ualloc_pd(struct ibv_context *context)
 	if (!iwupd)
 		return NULL;
 	memset(&resp, 0, sizeof(resp));
-	if (ibv_cmd_alloc_pd(context, &iwupd->ibv_pd, &cmd, sizeof(cmd), &resp.ibv_resp, sizeof(resp)))
+	if (ibv_cmd_alloc_pd(context, &iwupd->ibv_pd, &cmd, sizeof(cmd),
+			     &resp.ibv_resp, sizeof(resp), import, fd,
+			     pd_handle))
 		goto err_free;
 
 	iwupd->pd_id = resp.pd_id;
@@ -120,6 +123,12 @@ struct ibv_pd *i40iw_ualloc_pd(struct ibv_context *context)
 err_free:
 	free(iwupd);
 	return NULL;
+}
+
+struct ibv_pd *i40iw_ualloc_pd(struct ibv_context *context)
+{
+	return i40iw_uimport_pd(context, VERBS_IMPORT_OFF, VERBS_NULL_FD,
+				VERBS_NULL_PD);
 }
 
 /**

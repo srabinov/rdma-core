@@ -279,6 +279,10 @@ int pvrdma_query_port(struct ibv_context *context, uint8_t port,
 		      struct ibv_port_attr *attr);
 
 struct ibv_pd *pvrdma_alloc_pd(struct ibv_context *context);
+struct ibv_pd *pvrdma_import_pd(struct ibv_context *context,
+				uint8_t import,
+				uint32_t fd,
+				uint32_t pd_handle);
 int pvrdma_free_pd(struct ibv_pd *pd);
 
 struct ibv_mr *pvrdma_reg_mr(struct ibv_pd *pd, void *addr,

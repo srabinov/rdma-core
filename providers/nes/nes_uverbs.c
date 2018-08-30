@@ -111,7 +111,8 @@ int nes_uquery_port(struct ibv_context *context, uint8_t port,
 /**
  * nes_ualloc_pd
  */
-struct ibv_pd *nes_ualloc_pd(struct ibv_context *context)
+struct ibv_pd *nes_uimport_pd(struct ibv_context *context, uint8_t import,
+			      uint32_t fd, uint32_t pd_handle)
 {
 	struct ibv_alloc_pd cmd;
 	struct nes_ualloc_pd_resp resp;
@@ -121,8 +122,9 @@ struct ibv_pd *nes_ualloc_pd(struct ibv_context *context)
 	if (!nesupd)
 		return NULL;
 
-	if (ibv_cmd_alloc_pd(context, &nesupd->ibv_pd, &cmd, sizeof cmd,
-			&resp.ibv_resp, sizeof resp)) {
+	if (ibv_cmd_alloc_pd(context, &nesupd->ibv_pd, &cmd, sizeof(cmd),
+			     &resp.ibv_resp, sizeof(resp), import, fd,
+			     pd_handle)) {
 		free(nesupd);
 		return NULL;
 	}
@@ -140,6 +142,11 @@ struct ibv_pd *nes_ualloc_pd(struct ibv_context *context)
 	return &nesupd->ibv_pd;
 }
 
+struct ibv_pd *nes_ualloc_pd(struct ibv_context *context)
+{
+	return nes_uimport_pd(context, VERBS_IMPORT_OFF, VERBS_NULL_FD,
+			      VERBS_NULL_PD);
+}
 
 /**
  * nes_ufree_pd

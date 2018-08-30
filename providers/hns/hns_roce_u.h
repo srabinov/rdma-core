@@ -267,6 +267,9 @@ int hns_roce_u_query_port(struct ibv_context *context, uint8_t port,
 			  struct ibv_port_attr *attr);
 
 struct ibv_pd *hns_roce_u_alloc_pd(struct ibv_context *context);
+struct ibv_pd *hns_roce_u_import_pd(struct ibv_context *context,
+				    uint8_t import, uint32_t fd,
+				    uint32_t pd_handle);
 int hns_roce_u_free_pd(struct ibv_pd *pd);
 
 struct ibv_mr *hns_roce_u_reg_mr(struct ibv_pd *pd, void *addr, size_t length,

@@ -1670,6 +1670,7 @@ struct ibv_context_ops {
 	void *(*_compat_query_device)(void);
 	void *(*_compat_query_port)(void);
 	void *(*_compat_alloc_pd)(void);
+	void *(*_compat_import_pd)(void);
 	void *(*_compat_dealloc_pd)(void);
 	void *(*_compat_reg_mr)(void);
 	void *(*_compat_rereg_mr)(void);
@@ -2006,6 +2007,13 @@ int ibv_get_pkey_index(struct ibv_context *context, uint8_t port_num,
  * ibv_alloc_pd - Allocate a protection domain
  */
 struct ibv_pd *ibv_alloc_pd(struct ibv_context *context);
+
+/**
+ * ibv_import_pd - Import a protection domain from fd
+ */
+struct ibv_pd *ibv_import_pd(struct ibv_context *context,
+			     uint32_t fd,
+			     uint32_t pd_handle);
 
 /**
  * ibv_dealloc_pd - Free a protection domain

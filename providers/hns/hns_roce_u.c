@@ -63,6 +63,7 @@ static const struct verbs_match_ent hca_table[] = {
 
 static const struct verbs_context_ops hns_common_ops = {
 	.alloc_pd = hns_roce_u_alloc_pd,
+	.import_pd = hns_roce_u_import_pd,
 	.cq_event = hns_roce_u_cq_event,
 	.create_cq = hns_roce_u_create_cq,
 	.create_qp = hns_roce_u_create_qp,

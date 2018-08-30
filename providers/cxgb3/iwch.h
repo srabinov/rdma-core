@@ -148,6 +148,10 @@ extern int iwch_query_port(struct ibv_context *context, uint8_t port,
 			   struct ibv_port_attr *attr);
 
 extern struct ibv_pd *iwch_alloc_pd(struct ibv_context *context);
+extern struct ibv_pd *iwch_import_pd(struct ibv_context *context,
+				     uint8_t import,
+				     uint32_t fd,
+				     uint32_t pd_handle);
 extern int iwch_free_pd(struct ibv_pd *pd);
 
 extern struct ibv_mr *iwch_reg_mr(struct ibv_pd *pd, void *addr,

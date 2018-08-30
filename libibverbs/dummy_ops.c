@@ -66,6 +66,13 @@ static struct ibv_pd *alloc_pd(struct ibv_context *context)
 	return NULL;
 }
 
+static struct ibv_pd *import_pd(struct ibv_context *context, uint8_t import,
+				uint32_t fd, uint32_t pd_handle)
+{
+	errno = ENOSYS;
+	return NULL;
+}
+
 static struct ibv_td *alloc_td(struct ibv_context *context,
 			       struct ibv_td_init_attr *init_attr)
 {
@@ -441,6 +448,7 @@ const struct verbs_context_ops verbs_dummy_ops = {
 	alloc_null_mr,
 	alloc_parent_domain,
 	alloc_pd,
+	import_pd,
 	alloc_td,
 	async_event,
 	attach_counters_point_flow,
@@ -554,6 +562,7 @@ void verbs_set_ops(struct verbs_context *vctx,
 	SET_OP(ctx, alloc_mw);
 	SET_OP(vctx, alloc_null_mr);
 	SET_PRIV_OP(ctx, alloc_pd);
+	SET_PRIV_OP(ctx, import_pd);
 	SET_OP(vctx, alloc_parent_domain);
 	SET_OP(vctx, alloc_td);
 	SET_OP(vctx, attach_counters_point_flow);

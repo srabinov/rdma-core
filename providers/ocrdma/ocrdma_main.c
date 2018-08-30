@@ -68,6 +68,7 @@ static const struct verbs_context_ops ocrdma_ctx_ops = {
 	.query_device = ocrdma_query_device,
 	.query_port = ocrdma_query_port,
 	.alloc_pd = ocrdma_alloc_pd,
+	.import_pd = ocrdma_import_pd,
 	.dealloc_pd = ocrdma_free_pd,
 	.reg_mr = ocrdma_reg_mr,
 	.dereg_mr = ocrdma_dereg_mr,
