@@ -99,3 +99,12 @@ int ibv_cmd_query_port(struct ibv_context *context, uint8_t port_num,
 	return 0;
 }
 
+int ibv_cmd_export_to_fd(struct ibv_context *context,
+			 struct ibv_export_to_fd *cmd,
+			 size_t cmd_size,
+			 struct ib_uverbs_export_to_fd_resp *resp,
+			 size_t resp_size)
+{
+	return execute_cmd_write(context, IB_USER_VERBS_CMD_EXPORT_TO_FD, cmd,
+				 cmd_size, resp, resp_size);
+}

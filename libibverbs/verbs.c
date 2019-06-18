@@ -934,6 +934,32 @@ LATEST_SYMVER_FUNC(ibv_detach_mcast, 1_1, "IBVERBS_1.1",
 	return get_ops(qp->context)->detach_mcast(qp, gid, lid);
 }
 
+LATEST_SYMVER_FUNC(ibv_export_to_fd, 1_1, "IBVERBS_1.1",
+		   int,
+		   uint32_t			dst_fd,
+		   uint32_t		       *dst_handle,
+		   struct ibv_context	       *src_context,
+		   enum uverbs_default_objects	src_type,
+		   uint32_t			src_handle)
+{
+	struct ibv_export_to_fd cmd = {
+		.handle = src_handle,
+		.type = src_type,
+		.fd = dst_fd,
+	};
+	struct ib_uverbs_export_to_fd_resp resp = {};
+	int ret;
+
+	ret = ibv_cmd_export_to_fd(src_context, &cmd, sizeof(cmd), &resp,
+				   sizeof(resp));
+	if (ret)
+		return ret;
+
+	*dst_handle = resp.handle;
+
+	return 0;
+}
+
 static inline int ipv6_addr_v4mapped(const struct in6_addr *a)
 {
 	return IN6_IS_ADDR_V4MAPPED(&a->s6_addr32) ||
