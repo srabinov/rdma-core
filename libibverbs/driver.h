@@ -593,6 +593,11 @@ int ibv_cmd_reg_dm_mr(struct ibv_pd *pd, struct verbs_dm *dm,
 		      uint64_t offset, size_t length,
 		      unsigned int access, struct verbs_mr *vmr,
 		      struct ibv_command_buffer *link);
+int ibv_cmd_export_to_fd(struct ibv_context *context,
+			 struct ibv_export_to_fd *cmd,
+			 size_t cmd_size,
+			 struct ib_uverbs_export_to_fd_resp *resp,
+			 size_t resp_size);
 
 /*
  * sysfs helper functions
