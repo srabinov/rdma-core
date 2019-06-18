@@ -189,4 +189,5 @@ IBVERBS_PRIVATE_@IBVERBS_PABI_VERSION@ {
 		verbs_uninit_context;
 		verbs_init_cq;
 		ibv_cmd_modify_cq;
+		ibv_cmd_export_to_fd;
 };
