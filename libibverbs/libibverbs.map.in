@@ -114,6 +114,7 @@ IBVERBS_1.5 {
 IBVERBS_1.6 {
 	global:
 		ibv_qp_to_qp_ex;
+		ibv_export_to_fd;
 } IBVERBS_1.5;
 
 /* If any symbols in this stanza change ABI then the entire staza gets a new symbol
@@ -189,4 +190,5 @@ IBVERBS_PRIVATE_@IBVERBS_PABI_VERSION@ {
 		verbs_uninit_context;
 		verbs_init_cq;
 		ibv_cmd_modify_cq;
+		ibv_cmd_export_to_fd;
 };

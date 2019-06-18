@@ -44,6 +44,7 @@
 #include <linux/types.h>
 #include <stdint.h>
 #include <infiniband/verbs_api.h>
+#include <rdma/ib_user_ioctl_cmds.h>
 
 #ifdef __cplusplus
 #include <limits>
@@ -3260,6 +3261,11 @@ static inline int ibv_read_counters(struct ibv_counters *counters,
 
 	return vctx->read_counters(counters, counters_value, ncounters, flags);
 }
+
+/* object sharing support */
+int ibv_export_to_fd(uint32_t dst_fd, uint32_t *dst_handle,
+		     struct ibv_context *src_context,
+		     enum uverbs_default_objects src_type, uint32_t src_handle);
 
 #ifdef __cplusplus
 }
