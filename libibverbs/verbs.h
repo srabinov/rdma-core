@@ -2015,6 +2015,8 @@ struct ibv_values_ex {
 
 struct verbs_context {
 	/*  "grows up" - new fields go here */
+	struct ibv_pd *(*import_pd)(struct ibv_context *context, uint32_t fd,
+				    uint32_t handle);
 	int (*query_port)(struct ibv_context *context, uint8_t port_num,
 			  struct ibv_port_attr *port_attr,
 			  size_t port_attr_len);
@@ -3276,6 +3278,24 @@ static inline uint32_t ibv_pd_to_handle(struct ibv_pd *pd)
 static inline uint32_t ibv_mr_to_handle(struct ibv_mr *mr)
 {
 	return mr->handle;
+}
+
+static inline struct ibv_pd *ibv_import_pd(struct ibv_context *context,
+					   uint32_t fd, uint32_t handle)
+{
+	struct verbs_context *vctx = verbs_get_ctx_op(context, import_pd);
+	struct ibv_pd *pd;
+
+	if (!vctx) {
+		errno = ENOSYS;
+		return NULL;
+	}
+
+	pd = vctx->import_pd(context, fd, handle);
+	if (pd)
+		pd->context = context;
+
+	return pd;
 }
 
 #ifdef __cplusplus

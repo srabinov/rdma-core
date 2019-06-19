@@ -282,6 +282,13 @@ static int get_srq_num(struct ibv_srq *srq, uint32_t *srq_num)
 	return ENOSYS;
 }
 
+static struct ibv_pd *import_pd(struct ibv_context *context, uint32_t fd,
+				uint32_t handle)
+{
+	errno = ENOSYS;
+	return NULL;
+}
+
 static int modify_cq(struct ibv_cq *cq, struct ibv_modify_cq_attr *attr)
 {
 	return ENOSYS;
@@ -487,6 +494,7 @@ const struct verbs_context_ops verbs_dummy_ops = {
 	detach_mcast,
 	free_dm,
 	get_srq_num,
+	import_pd,
 	modify_cq,
 	modify_flow_action_esp,
 	modify_qp,
@@ -627,6 +635,7 @@ void verbs_set_ops(struct verbs_context *vctx,
 	SET_OP(ctx, req_notify_cq);
 	SET_PRIV_OP(ctx, rereg_mr);
 	SET_PRIV_OP(ctx, resize_cq);
+	SET_OP(vctx, import_pd);
 
 #undef SET_OP
 #undef SET_OP2
