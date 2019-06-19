@@ -89,6 +89,7 @@ enum ib_uverbs_write_cmds {
 	IB_USER_VERBS_CMD_CREATE_XSRQ,
 	IB_USER_VERBS_CMD_OPEN_QP,
 	IB_USER_VERBS_CMD_EXPORT_TO_FD,
+	IB_USER_VERBS_CMD_IMPORT_FROM_FD,
 };
 
 enum {
@@ -1309,6 +1310,18 @@ struct ib_uverbs_export_to_fd {
 };
 
 struct ib_uverbs_export_to_fd_resp {
+	__u32 handle;
+};
+
+struct ib_uverbs_import_from_fd {
+	__aligned_u64 response;
+	__u32 fd;
+	__u32 handle;
+	__u16 type;
+	__u8  reserved[6];
+};
+
+struct ib_uverbs_import_from_fd_resp {
 	__u32 handle;
 };
 
