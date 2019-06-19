@@ -294,6 +294,23 @@ int ibv_cmd_alloc_pd(struct ibv_context *context, struct ibv_pd *pd,
 	return 0;
 }
 
+int ibv_cmd_import_pd(struct ibv_context *context, struct ibv_pd *pd,
+		      struct ibv_import_pd *cmd, size_t cmd_size,
+		      struct ib_uverbs_alloc_pd_resp *resp, size_t resp_size)
+{
+	int ret;
+
+	ret = execute_cmd_write(context, IB_USER_VERBS_CMD_IMPORT_PD, cmd,
+				cmd_size, resp, resp_size);
+	if (ret)
+		return ret;
+
+	pd->handle  = resp->pd_handle;
+	pd->context = context;
+
+	return 0;
+}
+
 int ibv_cmd_open_xrcd(struct ibv_context *context, struct verbs_xrcd *xrcd,
 		      int vxrcd_size,
 		      struct ibv_xrcd_init_attr *attr,
