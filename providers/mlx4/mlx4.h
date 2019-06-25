@@ -316,6 +316,8 @@ int mlx4_query_rt_values(struct ibv_context *context,
 			 struct ibv_values_ex *values);
 struct ibv_pd *mlx4_alloc_pd(struct ibv_context *context);
 int mlx4_free_pd(struct ibv_pd *pd);
+struct ibv_pd *mlx4_import_pd(struct ibv_context *context, uint32_t fd,
+			      uint32_t handle);
 struct ibv_xrcd *mlx4_open_xrcd(struct ibv_context *context,
 				struct ibv_xrcd_init_attr *attr);
 int mlx4_close_xrcd(struct ibv_xrcd *xrcd);
