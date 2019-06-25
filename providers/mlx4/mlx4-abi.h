@@ -70,5 +70,7 @@ DECLARE_DRV_CMD(mlx4_query_device_ex, IB_USER_VERBS_EX_CMD_QUERY_DEVICE,
 		empty, mlx4_uverbs_ex_query_device_resp);
 DECLARE_DRV_CMD(mlx4_resize_cq, IB_USER_VERBS_CMD_RESIZE_CQ,
 		mlx4_ib_resize_cq, empty);
+DECLARE_DRV_CMD(mlx4_import_pd, IB_USER_VERBS_CMD_IMPORT_PD,
+		empty, mlx4_ib_alloc_pd_resp);
 
 #endif /* MLX4_ABI_H */
