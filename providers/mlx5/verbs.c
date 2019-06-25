@@ -178,6 +178,34 @@ struct ibv_pd *mlx5_alloc_pd(struct ibv_context *context)
 	return &pd->ibv_pd;
 }
 
+struct ibv_pd *mlx5_import_pd(struct ibv_context *context, uint32_t fd,
+			      uint32_t handle)
+{
+	struct ibv_import_pd cmd = {
+		.handle = handle,
+		.type = UVERBS_OBJECT_PD,
+		.fd = fd,
+	};
+	struct mlx5_alloc_pd_resp resp;
+	struct mlx5_pd		 *pd;
+	int ret;
+
+	pd = malloc(sizeof *pd);
+	if (!pd)
+		return NULL;
+
+	ret = ibv_cmd_import_pd(context, &pd->ibv_pd, &cmd, sizeof cmd,
+				&resp.ibv_resp, sizeof resp);
+	if (ret) {
+		free(pd);
+		return NULL;
+	}
+
+	pd->pdn = resp.pdn;
+
+	return &pd->ibv_pd;
+}
+
 static void mlx5_put_bfreg_index(struct mlx5_context *ctx, uint32_t bfreg_dyn_index)
 {
 	pthread_mutex_lock(&ctx->dyn_bfregs_mutex);
