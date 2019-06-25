@@ -49,6 +49,7 @@
 #include <pthread.h>
 #include <stddef.h>
 
+#include <rdma/ib_user_ioctl_cmds.h>
 #include <infiniband/driver.h>
 #include <infiniband/verbs.h>
 
@@ -104,6 +105,32 @@ static struct ibv_pd *rxe_alloc_pd(struct ibv_context *context)
 		return NULL;
 
 	if (ibv_cmd_alloc_pd(context, pd, &cmd, sizeof cmd, &resp, sizeof resp)) {
+		free(pd);
+		return NULL;
+	}
+
+	return pd;
+}
+
+static struct ibv_pd *rxe_import_pd(struct ibv_context *context, uint32_t fd,
+				    uint32_t handle)
+{
+	struct ibv_import_from_fd cmd = {
+		.handle = handle,
+		.type = UVERBS_OBJECT_PD,
+		.fd = fd,
+	};
+	struct ib_uverbs_alloc_pd_resp resp;
+	struct ibv_pd *pd;
+	int ret;
+
+	pd = malloc(sizeof *pd);
+	if (!pd)
+		return NULL;
+
+	ret = ibv_cmd_import_pd(context, pd, &cmd, sizeof cmd, &resp,
+				sizeof resp);
+	if (ret) {
 		free(pd);
 		return NULL;
 	}
@@ -835,6 +862,7 @@ static const struct verbs_context_ops rxe_ctx_ops = {
 	.query_port = rxe_query_port,
 	.alloc_pd = rxe_alloc_pd,
 	.dealloc_pd = rxe_dealloc_pd,
+	.import_pd = rxe_import_pd,
 	.reg_mr = rxe_reg_mr,
 	.dereg_mr = rxe_dereg_mr,
 	.create_cq = rxe_create_cq,
