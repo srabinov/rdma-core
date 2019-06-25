@@ -41,6 +41,8 @@
 
 #include <util/mmio.h>
 
+#include <rdma/ib_user_ioctl_cmds.h>
+
 #include "mlx4.h"
 #include "mlx4-abi.h"
 
@@ -235,6 +237,34 @@ int mlx4_free_pd(struct ibv_pd *pd)
 
 	free(to_mpd(pd));
 	return 0;
+}
+
+struct ibv_pd *mlx4_import_pd(struct ibv_context *context, uint32_t fd,
+			      uint32_t handle)
+{
+	struct ibv_import_pd cmd = {
+		.handle = handle,
+		.type = UVERBS_OBJECT_PD,
+		.fd = fd,
+	};
+	struct mlx4_import_pd_resp resp;
+	struct mlx4_pd *pd;
+	int ret;
+
+	pd = malloc(sizeof(*pd));
+	if (!pd)
+		return NULL;
+
+	ret = ibv_cmd_import_pd(context, &pd->ibv_pd, &cmd, sizeof(cmd),
+				&resp.ibv_resp, sizeof(resp));
+	if (ret) {
+		free(pd);
+		return NULL;
+	}
+
+	pd->pdn = resp.pdn;
+
+	return &pd->ibv_pd;
 }
 
 struct ibv_xrcd *mlx4_open_xrcd(struct ibv_context *context,
