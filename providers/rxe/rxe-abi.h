@@ -49,5 +49,7 @@ DECLARE_DRV_CMD(urxe_modify_srq, IB_USER_VERBS_CMD_MODIFY_SRQ,
 		rxe_modify_srq_cmd, empty);
 DECLARE_DRV_CMD(urxe_resize_cq, IB_USER_VERBS_CMD_RESIZE_CQ,
 		empty, rxe_resize_cq_resp);
+DECLARE_DRV_CMD(urxe_import_pd, IB_USER_VERBS_CMD_IMPORT_PD,
+		empty, ib_uverbs_alloc_pd_resp);
 
 #endif /* RXE_ABI_H */
