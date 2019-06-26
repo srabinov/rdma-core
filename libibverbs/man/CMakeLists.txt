@@ -28,6 +28,7 @@ rdma_man_pages(
   ibv_devices.1
   ibv_devinfo.1
   ibv_event_type_str.3.md
+  ibv_export_to_fd.3.md
   ibv_fork_init.3.md
   ibv_get_async_event.3
   ibv_get_cq_event.3
