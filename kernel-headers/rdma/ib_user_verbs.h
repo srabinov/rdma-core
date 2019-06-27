@@ -90,6 +90,7 @@ enum ib_uverbs_write_cmds {
 	IB_USER_VERBS_CMD_OPEN_QP,
 	IB_USER_VERBS_CMD_IMPORT_FROM_FD,
 	IB_USER_VERBS_CMD_IMPORT_PD = IB_USER_VERBS_CMD_IMPORT_FROM_FD,
+	IB_USER_VERBS_CMD_IMPORT_MR = IB_USER_VERBS_CMD_IMPORT_FROM_FD,
 };
 
 enum {
@@ -1309,9 +1310,18 @@ struct ib_uverbs_import_pd {
 	__u8  reserved[6];
 };
 
+struct ib_uverbs_import_mr {
+	__aligned_u64 response;
+	__u32 fd;
+	__u32 handle;
+	__u16 type;
+	__u8  reserved[6];
+};
+
 struct ib_uverbs_import_fr_fd_resp {
 	union {
 		struct ib_uverbs_alloc_pd_resp alloc_pd;
+		struct ib_uverbs_reg_mr_resp reg_mr;
 	} u;
 };
 
