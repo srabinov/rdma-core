@@ -960,6 +960,24 @@ LATEST_SYMVER_FUNC(ibv_export_to_fd, 1_1, "IBVERBS_1.1",
 	return 0;
 }
 
+LATEST_SYMVER_FUNC(ibv_import_mr, 1_1, "IBVERBS_1.6",
+		   struct ibv_mr *,
+		   struct ibv_context	       *context,
+		   uint32_t			fd,
+		   uint32_t			handle)
+{
+	struct ibv_mr *mr;
+
+	if (!get_ops(context)->import_mr)
+		return NULL;
+
+	mr = get_ops(context)->import_mr(context, fd, handle);
+	if (mr)
+		mr->context = context;
+
+	return mr;
+}
+
 LATEST_SYMVER_FUNC(ibv_import_pd, 1_1, "IBVERBS_1.6",
 		   struct ibv_pd *,
 		   struct ibv_context	       *context,
