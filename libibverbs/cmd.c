@@ -382,6 +382,27 @@ int ibv_cmd_reg_mr(struct ibv_pd *pd, void *addr, size_t length,
 	return 0;
 }
 
+int ibv_cmd_import_mr(struct ibv_context *context, struct verbs_mr *vmr,
+		      struct ibv_import_mr *cmd, size_t cmd_size,
+		      struct ib_uverbs_import_fr_fd_resp *resp,
+		      size_t resp_size)
+{
+	int ret;
+
+	ret = execute_cmd_write(context, IB_USER_VERBS_CMD_IMPORT_MR, cmd,
+				cmd_size, resp, resp_size);
+	if (ret)
+		return ret;
+
+	vmr->ibv_mr.handle  = resp->u.reg_mr.mr_handle;
+	vmr->ibv_mr.lkey    = resp->u.reg_mr.lkey;
+	vmr->ibv_mr.rkey    = resp->u.reg_mr.rkey;
+	vmr->ibv_mr.context = context;
+	vmr->mr_type        = IBV_MR_TYPE_MR;
+
+	return 0;
+}
+
 int ibv_cmd_rereg_mr(struct verbs_mr *vmr, uint32_t flags, void *addr,
 		     size_t length, uint64_t hca_va, int access,
 		     struct ibv_pd *pd, struct ibv_rereg_mr *cmd,
