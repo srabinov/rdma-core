@@ -3261,6 +3261,11 @@ static inline int ibv_read_counters(struct ibv_counters *counters,
 	return vctx->read_counters(counters, counters_value, ncounters, flags);
 }
 
+/* object sharing support */
+uint32_t ibv_context_to_fd(struct ibv_context *context);
+uint32_t ibv_pd_to_handle(struct ibv_pd *pd);
+uint32_t ibv_mr_to_handle(struct ibv_mr *mr);
+
 #ifdef __cplusplus
 }
 #endif
