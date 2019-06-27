@@ -70,6 +70,7 @@ rdma_man_pages(
   ibv_ud_pingpong.1
   ibv_wr_post.3.md
   ibv_xsrq_pingpong.1
+  ibv_shpd_pingpong.1
   )
 rdma_alias_man_pages(
   ibv_alloc_dm.3 ibv_free_dm.3
