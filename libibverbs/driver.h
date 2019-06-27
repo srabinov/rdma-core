@@ -435,7 +435,7 @@ int ibv_cmd_alloc_pd(struct ibv_context *context, struct ibv_pd *pd,
 		     struct ib_uverbs_alloc_pd_resp *resp, size_t resp_size);
 int ibv_cmd_dealloc_pd(struct ibv_pd *pd);
 int ibv_cmd_import_pd(struct ibv_context *context, struct ibv_pd *pd,
-		      struct ibv_import_from_fd *cmd, size_t cmd_size,
+		      struct ibv_import_pd *cmd, size_t cmd_size,
 		      struct ib_uverbs_alloc_pd_resp *resp, size_t resp_size);
 int ibv_cmd_open_xrcd(struct ibv_context *context, struct verbs_xrcd *xrcd,
 		      int vxrcd_size,

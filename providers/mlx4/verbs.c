@@ -242,7 +242,7 @@ int mlx4_free_pd(struct ibv_pd *pd)
 struct ibv_pd *mlx4_import_pd(struct ibv_context *context, uint32_t fd,
 			      uint32_t handle)
 {
-	struct ibv_import_from_fd cmd = {
+	struct ibv_import_pd cmd = {
 		.handle = handle,
 		.type = UVERBS_OBJECT_PD,
 		.fd = fd,
