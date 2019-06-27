@@ -293,6 +293,8 @@ struct verbs_context_ops {
 			    uint16_t lid);
 	int (*free_dm)(struct ibv_dm *dm);
 	int (*get_srq_num)(struct ibv_srq *srq, uint32_t *srq_num);
+	struct ibv_mr *(*import_mr)(struct ibv_context *context, uint32_t fd,
+				    uint32_t handle);
 	struct ibv_pd *(*import_pd)(struct ibv_context *context, uint32_t fd,
 				    uint32_t handle);
 	int (*modify_cq)(struct ibv_cq *cq, struct ibv_modify_cq_attr *attr);
@@ -455,6 +457,10 @@ int ibv_cmd_rereg_mr(struct verbs_mr *vmr, uint32_t flags, void *addr,
 		     size_t cmd_sz, struct ib_uverbs_rereg_mr_resp *resp,
 		     size_t resp_sz);
 int ibv_cmd_dereg_mr(struct verbs_mr *vmr);
+int ibv_cmd_import_mr(struct ibv_context *context, struct verbs_mr *vmr,
+		      struct ibv_import_mr *cmd, size_t cmd_size,
+		      struct ib_uverbs_import_fr_fd_resp *resp,
+		      size_t resp_size);
 int ibv_cmd_advise_mr(struct ibv_pd *pd,
 		      enum ibv_advise_mr_advice advice,
 		      uint32_t flags,
