@@ -3267,6 +3267,9 @@ int ibv_export_to_fd(uint32_t dst_fd, uint32_t *dst_handle,
 		     struct ibv_context *src_context,
 		     enum uverbs_default_objects src_type, uint32_t src_handle);
 
+struct ibv_pd *ibv_import_pd(struct ibv_context *context, uint32_t fd,
+			     uint32_t handle);
+
 #ifdef __cplusplus
 }
 #endif
