@@ -3274,6 +3274,9 @@ int ibv_export_to_fd(uint32_t dst_fd, uint32_t *dst_handle,
 struct ibv_pd *ibv_import_pd(struct ibv_context *context, uint32_t fd,
 			     uint32_t handle);
 
+struct ibv_mr *ibv_import_mr(struct ibv_context *context, uint32_t fd,
+			     uint32_t handle);
+
 #ifdef __cplusplus
 }
 #endif
