@@ -1058,3 +1058,24 @@ free_resources:
 	return -ENOSYS;
 #endif
 }
+
+LATEST_SYMVER_FUNC(ibv_context_to_fd, 1_1, "IBVERBS_1.1",
+                   uint32_t,
+                   struct ibv_context *context)
+{
+	return context->cmd_fd;
+}
+
+LATEST_SYMVER_FUNC(ibv_pd_to_handle, 1_1, "IBVERBS_1.1",
+                   uint32_t,
+                   struct ibv_pd *pd)
+{
+	return pd->handle;
+}
+
+LATEST_SYMVER_FUNC(ibv_mr_to_handle, 1_1, "IBVERBS_1.1",
+                   uint32_t,
+                   struct ibv_mr *mr)
+{
+	return mr->handle;
+}
