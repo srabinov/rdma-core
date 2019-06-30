@@ -816,6 +816,8 @@ int mlx5_query_port(struct ibv_context *context, uint8_t port,
 
 struct ibv_pd *mlx5_alloc_pd(struct ibv_context *context);
 int mlx5_free_pd(struct ibv_pd *pd);
+struct ibv_mr *mlx5_import_mr(struct ibv_context *context, uint32_t fd,
+			      uint32_t handle);
 struct ibv_pd *mlx5_import_pd(struct ibv_context *context, uint32_t fd,
 			      uint32_t handle);
 
