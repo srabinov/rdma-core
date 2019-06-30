@@ -239,6 +239,32 @@ int mlx4_free_pd(struct ibv_pd *pd)
 	return 0;
 }
 
+struct ibv_mr *mlx4_import_mr(struct ibv_context *context, uint32_t fd,
+			      uint32_t handle)
+{
+	struct ibv_import_mr cmd = {
+		.handle = handle,
+		.type = UVERBS_OBJECT_MR,
+		.fd = fd,
+	};
+	struct ib_uverbs_import_fr_fd_resp resp;
+	struct verbs_mr *vmr;
+	int ret;
+
+	vmr = calloc(1, sizeof(*vmr));
+	if (!vmr)
+		return NULL;
+
+	ret = ibv_cmd_import_mr(context, vmr, &cmd, sizeof(cmd), &resp,
+				sizeof(resp));
+	if (ret) {
+		free(vmr);
+		return NULL;
+	}
+
+	return &vmr->ibv_mr;
+}
+
 struct ibv_pd *mlx4_import_pd(struct ibv_context *context, uint32_t fd,
 			      uint32_t handle)
 {
