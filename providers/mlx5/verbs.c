@@ -178,6 +178,32 @@ struct ibv_pd *mlx5_alloc_pd(struct ibv_context *context)
 	return &pd->ibv_pd;
 }
 
+struct ibv_mr *mlx5_import_mr(struct ibv_context *context, uint32_t fd,
+			      uint32_t handle)
+{
+	struct ibv_import_mr cmd = {
+		.handle = handle,
+		.type = UVERBS_OBJECT_MR,
+		.fd = fd,
+	};
+	struct ib_uverbs_reg_mr_resp resp;
+	struct mlx5_mr *mr;
+	int ret;
+
+	mr = malloc(sizeof *mr);
+	if (!mr)
+		return NULL;
+
+	ret = ibv_cmd_import_mr(context, &mr->vmr, &cmd, sizeof cmd, &resp,
+				sizeof resp);
+	if (ret) {
+		free(mr);
+		return NULL;
+	}
+
+	return &mr->vmr.ibv_mr;
+}
+
 struct ibv_pd *mlx5_import_pd(struct ibv_context *context, uint32_t fd,
 			      uint32_t handle)
 {
