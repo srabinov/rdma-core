@@ -564,7 +564,7 @@ static struct pingpong_context *pp_init_ctx(struct ibv_device *ib_dev,
 				       ctx->context,
 				       UVERBS_OBJECT_PD,
 				       ibv_pd_to_handle(ctx->pd));
-		if (ret < 0) {
+		if (ret) {
 			fprintf(stderr, "Couldn't export PD to fd. ret %d\n", ret);
 			goto err;
 		}
@@ -587,7 +587,7 @@ static struct pingpong_context *pp_init_ctx(struct ibv_device *ib_dev,
 				       ctx->context,
 				       UVERBS_OBJECT_MR,
 				       ibv_mr_to_handle(ctx->mr));
-		if (ret < 0) {
+		if (ret) {
 			fprintf(stderr, "Couldn't export MR to fd. ret %d\n", ret);
 			goto err;
 		}
