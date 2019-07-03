@@ -296,16 +296,17 @@ int ibv_cmd_alloc_pd(struct ibv_context *context, struct ibv_pd *pd,
 
 int ibv_cmd_import_pd(struct ibv_context *context, struct ibv_pd *pd,
 		      struct ibv_import_pd *cmd, size_t cmd_size,
-		      struct ib_uverbs_alloc_pd_resp *resp, size_t resp_size)
+		      struct ib_uverbs_import_fr_fd_resp *resp, size_t resp_size)
 {
 	int ret;
 
 	ret = execute_cmd_write(context, IB_USER_VERBS_CMD_IMPORT_PD, cmd,
 				cmd_size, resp, resp_size);
+	fprintf(stderr, "%s(%d) ret %d\n",__FUNCTION__ ,__LINE__, ret);
 	if (ret)
 		return ret;
 
-	pd->handle  = resp->pd_handle;
+	pd->handle  = resp->u.alloc_pd.pd_handle;
 	pd->context = context;
 
 	return 0;
@@ -383,7 +384,7 @@ int ibv_cmd_reg_mr(struct ibv_pd *pd, void *addr, size_t length,
 
 int ibv_cmd_import_mr(struct ibv_context *context, struct verbs_mr *vmr,
 		      struct ibv_import_mr *cmd, size_t cmd_size,
-		      struct ib_uverbs_reg_mr_resp *resp, size_t resp_size)
+		      struct ib_uverbs_import_fr_fd_resp *resp, size_t resp_size)
 {
 	int ret;
 
@@ -392,9 +393,9 @@ int ibv_cmd_import_mr(struct ibv_context *context, struct verbs_mr *vmr,
 	if (ret)
 		return ret;
 
-	vmr->ibv_mr.handle  = resp->mr_handle;
-	vmr->ibv_mr.lkey    = resp->lkey;
-	vmr->ibv_mr.rkey    = resp->rkey;
+	vmr->ibv_mr.handle  = resp->u.reg_mr.mr_handle;
+	vmr->ibv_mr.lkey    = resp->u.reg_mr.lkey;
+	vmr->ibv_mr.rkey    = resp->u.reg_mr.rkey;
 	vmr->ibv_mr.context = context;
 	vmr->mr_type        = IBV_MR_TYPE_MR;
 

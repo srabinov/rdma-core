@@ -208,8 +208,8 @@ DECLARE_CMDX(IB_USER_VERBS_CMD_REQ_NOTIFY_CQ, ibv_req_notify_cq, ib_uverbs_req_n
 DECLARE_CMD(IB_USER_VERBS_CMD_REREG_MR, ibv_rereg_mr, ib_uverbs_rereg_mr);
 DECLARE_CMD(IB_USER_VERBS_CMD_RESIZE_CQ, ibv_resize_cq, ib_uverbs_resize_cq);
 DECLARE_CMD(IB_USER_VERBS_CMD_EXPORT_TO_FD, ibv_export_to_fd, ib_uverbs_export_to_fd);
-DECLARE_CMDX(IB_USER_VERBS_CMD_IMPORT_PD, ibv_import_pd, ib_uverbs_import_pd, ib_uverbs_alloc_pd_resp);
-DECLARE_CMDX(IB_USER_VERBS_CMD_IMPORT_MR, ibv_import_mr, ib_uverbs_import_mr, ib_uverbs_reg_mr_resp);
+DECLARE_CMDX(IB_USER_VERBS_CMD_IMPORT_PD, ibv_import_pd, ib_uverbs_import_pd, ib_uverbs_import_fr_fd_resp);
+DECLARE_CMDX(IB_USER_VERBS_CMD_IMPORT_MR, ibv_import_mr, ib_uverbs_import_mr, ib_uverbs_import_fr_fd_resp);
 
 DECLARE_CMD_EX(IB_USER_VERBS_EX_CMD_CREATE_CQ, ibv_create_cq_ex, ib_uverbs_ex_create_cq);
 DECLARE_CMD_EX(IB_USER_VERBS_EX_CMD_CREATE_FLOW, ibv_create_flow, ib_uverbs_create_flow);

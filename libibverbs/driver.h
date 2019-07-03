@@ -438,7 +438,7 @@ int ibv_cmd_alloc_pd(struct ibv_context *context, struct ibv_pd *pd,
 int ibv_cmd_dealloc_pd(struct ibv_pd *pd);
 int ibv_cmd_import_pd(struct ibv_context *context, struct ibv_pd *pd,
 		      struct ibv_import_pd *cmd, size_t cmd_size,
-		      struct ib_uverbs_alloc_pd_resp *resp, size_t resp_size);
+		      struct ib_uverbs_import_fr_fd_resp *resp, size_t resp_size);
 int ibv_cmd_open_xrcd(struct ibv_context *context, struct verbs_xrcd *xrcd,
 		      int vxrcd_size,
 		      struct ibv_xrcd_init_attr *attr,
@@ -458,7 +458,7 @@ int ibv_cmd_rereg_mr(struct verbs_mr *vmr, uint32_t flags, void *addr,
 int ibv_cmd_dereg_mr(struct verbs_mr *vmr);
 int ibv_cmd_import_mr(struct ibv_context *context, struct verbs_mr *vmr,
 		      struct ibv_import_mr *cmd, size_t cmd_size,
-		      struct ib_uverbs_reg_mr_resp *resp, size_t resp_size);
+		      struct ib_uverbs_import_fr_fd_resp *resp, size_t resp_size);
 int ibv_cmd_advise_mr(struct ibv_pd *pd,
 		      enum ibv_advise_mr_advice advice,
 		      uint32_t flags,

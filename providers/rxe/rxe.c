@@ -120,7 +120,7 @@ static struct ibv_mr *rxe_import_mr(struct ibv_context *context, uint32_t fd,
 		.type = UVERBS_OBJECT_MR,
 		.fd = fd,
 	};
-	struct ib_uverbs_reg_mr_resp resp;
+	struct ib_uverbs_import_fr_fd_resp resp;
 	struct verbs_mr *vmr;
 	int ret;
 
@@ -146,7 +146,7 @@ static struct ibv_pd *rxe_import_pd(struct ibv_context *context, uint32_t fd,
 		.type = UVERBS_OBJECT_PD,
 		.fd = fd,
 	};
-	struct ib_uverbs_alloc_pd_resp resp;
+	struct ib_uverbs_import_fr_fd_resp resp;
 	struct ibv_pd *pd;
 	int ret;
 

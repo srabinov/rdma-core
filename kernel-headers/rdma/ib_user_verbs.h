@@ -1331,6 +1331,13 @@ struct ib_uverbs_import_mr {
 	__u8  reserved[6];
 };
 
+struct ib_uverbs_import_fr_fd_resp {
+	union {
+		struct ib_uverbs_alloc_pd_resp alloc_pd;
+		struct ib_uverbs_reg_mr_resp reg_mr;
+	} u;
+};
+
 #define IB_DEVICE_NAME_MAX 64
 
 #endif /* IB_USER_VERBS_H */
