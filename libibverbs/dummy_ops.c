@@ -643,6 +643,7 @@ void verbs_set_ops(struct verbs_context *vctx,
 	SET_OP(ctx, req_notify_cq);
 	SET_PRIV_OP(ctx, rereg_mr);
 	SET_PRIV_OP(ctx, resize_cq);
+	SET_OP(ctx, import_pd);
 
 #undef SET_OP
 #undef SET_OP2
