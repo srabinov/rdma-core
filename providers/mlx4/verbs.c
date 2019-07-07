@@ -247,7 +247,7 @@ struct ibv_mr *mlx4_import_mr(struct ibv_context *context, uint32_t fd,
 		.type = UVERBS_OBJECT_MR,
 		.fd = fd,
 	};
-	struct ib_uverbs_reg_mr_resp resp;
+	struct ib_uverbs_import_fr_fd_resp resp;
 	struct verbs_mr *vmr;
 	int ret;
 
@@ -273,7 +273,7 @@ struct ibv_pd *mlx4_import_pd(struct ibv_context *context, uint32_t fd,
 		.type = UVERBS_OBJECT_PD,
 		.fd = fd,
 	};
-	struct mlx4_alloc_pd_resp resp;
+	struct mlx4_import_pd_resp resp;
 	struct mlx4_pd		 *pd;
 	int ret;
 
