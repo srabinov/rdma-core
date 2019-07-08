@@ -342,6 +342,7 @@ static int pp_setup_shm(struct pingpong_context *ctx)
 		return 1;
 	}
 
+	ctx->shm->shmaddr = ctx->shm;
 	ctx->shm->status  = 0;
 	return 0;
 }
@@ -646,6 +647,7 @@ static struct pingpong_context *pp_init_ctx(struct ibv_device *ib_dev,
 			fprintf(stderr, "Couldn't create QP\n");
 			goto err;
 		}
+		fprintf(stderr, "create QP\n");
 	}
 
 	{
@@ -666,6 +668,7 @@ static struct pingpong_context *pp_init_ctx(struct ibv_device *ib_dev,
 		}
 	}
 
+	fprintf(stderr, "%s(%d) ctx %p\n", __func__, __LINE__, ctx);
 	return ctx;
 
 err:
@@ -703,12 +706,10 @@ static int pp_close_ctx(struct pingpong_context *ctx)
 		return 1;
 	}
 
-	if (ctx->is_server) {
 		if (ibv_dereg_mr(ctx->mr)) {
 			fprintf(stderr, "Couldn't deregister MR\n");
 			return 1;
 		}
-	}
 
 	if (pp_delete_shm(ctx)) {
 		fprintf(stderr, "couldn't destroy shared memory\n");
@@ -947,30 +948,34 @@ int main(int argc, char *argv[])
 	if (!ctx)
 		goto err_dev_list;
 
+	fprintf(stderr, "%s(%d)\n", __func__, __LINE__);
 	routs = pp_post_recv(ctx, ctx->rx_depth);
 	if (routs < ctx->rx_depth) {
 		fprintf(stderr, "Couldn't post receive (%d)\n", routs);
 		goto err_ctx;
 	}
 
+	fprintf(stderr, "%s(%d)\n", __func__, __LINE__);
 	if (use_event)
 		if (ibv_req_notify_cq(ctx->cq, 0)) {
 			fprintf(stderr, "Couldn't request CQ notification\n");
 			goto err_ctx;
 		}
 
-
+	fprintf(stderr, "%s(%d)\n", __func__, __LINE__);
 	if (pp_get_port_info(ctx->context, ib_port, &ctx->portinfo)) {
 		fprintf(stderr, "Couldn't get port info\n");
 		goto err_ctx;
 	}
 
+	fprintf(stderr, "%s(%d)\n", __func__, __LINE__);
 	my_dest.lid = ctx->portinfo.lid;
 	if (ctx->portinfo.link_layer == IBV_LINK_LAYER_INFINIBAND && !my_dest.lid) {
 		fprintf(stderr, "Couldn't get local LID\n");
 		goto err_ctx;
 	}
 
+	fprintf(stderr, "%s(%d)\n", __func__, __LINE__);
 	if (gidx >= 0) {
 		if (ibv_query_gid(ctx->context, ib_port, gidx, &my_dest.gid)) {
 			fprintf(stderr, "Could not get local gid for gid index %d\n", gidx);
@@ -979,6 +984,7 @@ int main(int argc, char *argv[])
 	} else
 		memset(&my_dest.gid, 0, sizeof my_dest.gid);
 
+	fprintf(stderr, "%s(%d)\n", __func__, __LINE__);
 	my_dest.qpn = ctx->qp->qp_num;
 	my_dest.psn = lrand48() & 0xffffff;
 	inet_ntop(AF_INET6, &my_dest.gid, gid, sizeof gid);
@@ -993,6 +999,7 @@ int main(int argc, char *argv[])
 	if (!rem_dest)
 		goto err_ctx;
 
+	fprintf(stderr, "%s(%d)\n", __func__, __LINE__);
 	inet_ntop(AF_INET6, &rem_dest->gid, gid, sizeof gid);
 	printf("  remote address: LID 0x%04x, QPN 0x%06x, PSN 0x%06x, GID %s\n",
 	       rem_dest->lid, rem_dest->qpn, rem_dest->psn, gid);
@@ -1001,6 +1008,7 @@ int main(int argc, char *argv[])
 		if (pp_connect_ctx(ctx, ib_port, my_dest.psn, mtu, sl, rem_dest, gidx))
 			goto err_rem_dest;
 
+	fprintf(stderr, "%s(%d)\n", __func__, __LINE__);
 	ctx->pending = PINGPONG_RECV_WRID;
 
 	if (servername) {
@@ -1011,6 +1019,7 @@ int main(int argc, char *argv[])
 		ctx->pending |= PINGPONG_SEND_WRID;
 	}
 
+	fprintf(stderr, "%s(%d)\n", __func__, __LINE__);
 	if (gettimeofday(&start, NULL)) {
 		perror("gettimeofday");
 		goto err_rem_dest;
@@ -1116,6 +1125,9 @@ int main(int argc, char *argv[])
 	}
 
 	ibv_ack_cq_events(ctx->cq, num_cq_events);
+
+	fprintf(stderr, "%s(%d)\n", __func__, __LINE__);
+	getchar();
 
 	if (ctx->shared_context)
 		if (ibv_close_device(ctx->shared_context))

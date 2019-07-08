@@ -390,6 +390,7 @@ int ibv_cmd_import_mr(struct ibv_context *context, struct verbs_mr *vmr,
 
 	ret = execute_cmd_write(context, IB_USER_VERBS_CMD_IMPORT_MR, cmd, cmd_size,
 				resp, resp_size);
+	fprintf(stderr, "%s(%d) ret %d\n", __func__, __LINE__, ret);
 	if (ret)
 		return ret;
 
@@ -398,6 +399,8 @@ int ibv_cmd_import_mr(struct ibv_context *context, struct verbs_mr *vmr,
 	vmr->ibv_mr.rkey    = resp->u.reg_mr.rkey;
 	vmr->ibv_mr.context = context;
 	vmr->mr_type        = IBV_MR_TYPE_MR;
+
+	fprintf(stderr, "%s(%d) handle %d context %p lkey %d rkey %d\n", __func__, __LINE__, vmr->ibv_mr.handle, vmr->ibv_mr.context, vmr->ibv_mr.lkey, vmr->ibv_mr.rkey);
 
 	return 0;
 }

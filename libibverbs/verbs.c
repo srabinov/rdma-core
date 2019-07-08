@@ -318,6 +318,7 @@ LATEST_SYMVER_FUNC(ibv_reg_mr, 1_1, "IBVERBS_1.1",
 		mr->pd      = pd;
 		mr->addr    = addr;
 		mr->length  = length;
+		fprintf(stderr, "%s(%d) pd %p addr %p length %d lkey %d rkey %d\n", __func__, __LINE__, mr->pd, mr->addr, (int)mr->length, mr->lkey, mr->rkey);
 	} else
 		ibv_dofork_range(addr, length);
 
@@ -972,8 +973,10 @@ LATEST_SYMVER_FUNC(ibv_import_mr, 1_1, "IBVERBS_1.6",
 		return NULL;
 
 	mr = get_ops(context)->import_mr(context, fd, handle);
-	if (mr)
+	if (mr) {
 		mr->context = context;
+		fprintf(stderr, "%s(%d) pd %p addr %p length %d lkey %d rkey %d\n", __func__, __LINE__, mr->pd, mr->addr, (int)mr->length, mr->lkey, mr->rkey);
+	}
 
 	return mr;
 }

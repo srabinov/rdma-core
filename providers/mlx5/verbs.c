@@ -186,7 +186,7 @@ struct ibv_mr *mlx5_import_mr(struct ibv_context *context, uint32_t fd,
 		.type = UVERBS_OBJECT_MR,
 		.fd = fd,
 	};
-	struct ib_uverbs_reg_mr_resp resp;
+	struct ib_uverbs_import_fr_fd_resp resp = {0};
 	struct mlx5_mr *mr;
 	int ret;
 
@@ -207,12 +207,15 @@ struct ibv_mr *mlx5_import_mr(struct ibv_context *context, uint32_t fd,
 struct ibv_pd *mlx5_import_pd(struct ibv_context *context, uint32_t fd,
 			      uint32_t handle)
 {
+	return NULL;
+
+#if 0
 	struct ibv_import_pd cmd = {
 		.handle = handle,
 		.type = UVERBS_OBJECT_PD,
 		.fd = fd,
 	};
-	struct mlx5_alloc_pd_resp resp;
+	struct mlx5_import_pd_resp resp;
 	struct mlx5_pd		 *pd;
 	int ret;
 
@@ -227,9 +230,10 @@ struct ibv_pd *mlx5_import_pd(struct ibv_context *context, uint32_t fd,
 		return NULL;
 	}
 
-	pd->pdn = resp.pdn;
+	pd->pdn = resp.u.alloc_pd.pdn;
 
 	return &pd->ibv_pd;
+#endif
 }
 
 static void mlx5_put_bfreg_index(struct mlx5_context *ctx, uint32_t bfreg_dyn_index)

@@ -290,6 +290,8 @@ struct ibv_pd *mlx4_import_pd(struct ibv_context *context, uint32_t fd,
 
 	pd->pdn = resp.pdn;
 
+	fprintf(stderr, "%s(%d) pdn %d\n", __func__, __LINE__, resp.pdn);
+
 	return &pd->ibv_pd;
 }
 
