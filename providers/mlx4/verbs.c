@@ -251,7 +251,7 @@ struct ibv_mr *mlx4_import_mr(struct ibv_context *context, uint32_t fd,
 	struct verbs_mr *vmr;
 	int ret;
 
-	vmr = malloc(sizeof *vmr);
+	vmr = calloc(1, sizeof *vmr);
 	if (!vmr)
 		return NULL;
 
