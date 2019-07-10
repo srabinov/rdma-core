@@ -960,42 +960,6 @@ LATEST_SYMVER_FUNC(ibv_export_to_fd, 1_1, "IBVERBS_1.1",
 	return 0;
 }
 
-LATEST_SYMVER_FUNC(ibv_import_mr, 1_1, "IBVERBS_1.6",
-		   struct ibv_mr *,
-		   struct ibv_context	       *context,
-		   uint32_t			fd,
-		   uint32_t			handle)
-{
-	struct ibv_mr *mr;
-
-	if (!get_ops(context)->import_mr)
-		return NULL;
-
-	mr = get_ops(context)->import_mr(context, fd, handle);
-	if (mr)
-		mr->context = context;
-
-	return mr;
-}
-
-LATEST_SYMVER_FUNC(ibv_import_pd, 1_1, "IBVERBS_1.6",
-		   struct ibv_pd *,
-		   struct ibv_context	       *context,
-		   uint32_t			fd,
-		   uint32_t		       handle)
-{
-	struct ibv_pd *pd;
-
-	if (!get_ops(context)->import_pd)
-		return NULL;
-
-	pd = get_ops(context)->import_pd(context, fd, handle);
-	if (pd)
-		pd->context = context;
-
-	return pd;
-}
-
 static inline int ipv6_addr_v4mapped(const struct in6_addr *a)
 {
 	return IN6_IS_ADDR_V4MAPPED(&a->s6_addr32) ||

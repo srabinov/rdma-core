@@ -3287,11 +3287,43 @@ int ibv_export_to_fd(uint32_t dst_fd, uint32_t *dst_handle,
 		     struct ibv_context *src_context,
 		     enum uverbs_default_objects src_type, uint32_t src_handle);
 
+static inline
 struct ibv_pd *ibv_import_pd(struct ibv_context *context, uint32_t fd,
-			     uint32_t handle);
+			     uint32_t handle)
+{
+	struct verbs_context *vctx = verbs_get_ctx_op(context, import_pd);
+	struct ibv_pd *pd;
 
+	if (!vctx) {
+		errno = ENOSYS;
+		return NULL;
+	}
+
+	pd = vctx->import_pd(context, fd, handle);
+	if (pd)
+		pd->context = context;
+
+	return pd;
+}
+
+static inline
 struct ibv_mr *ibv_import_mr(struct ibv_context *context, uint32_t fd,
-			     uint32_t handle);
+			     uint32_t handle)
+{
+	struct verbs_context *vctx = verbs_get_ctx_op(context, import_mr);
+	struct ibv_mr *mr;
+
+	if (!vctx) {
+		errno = ENOSYS;
+		return NULL;
+	}
+
+	mr = vctx->import_mr(context, fd, handle);
+	if (mr)
+		mr->context = context;
+
+	return mr;
+}
 
 #ifdef __cplusplus
 }
