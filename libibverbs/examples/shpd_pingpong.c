@@ -342,7 +342,9 @@ static int pp_setup_shm(struct pingpong_context *ctx)
 		return 1;
 	}
 
+	ctx->shm->shmaddr = ctx->shm;
 	ctx->shm->status  = 0;
+
 	return 0;
 }
 
