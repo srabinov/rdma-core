@@ -74,7 +74,6 @@ struct ppshm {
 
 struct pingpong_context {
 	struct ibv_context	*context;
-	struct ibv_context	*shared_context;
 	struct ibv_comp_channel *channel;
 	struct ibv_pd		*pd;
 	struct ibv_mr		*mr;
@@ -412,7 +411,7 @@ static int pp_share_context(struct pingpong_context *ctx)
 	fd = (int *)CMSG_DATA(cmsghdr);
 
 	if (ctx->is_server) {
-		*fd = ibv_context_to_fd(ctx->shared_context);
+		*fd = ibv_context_to_fd(ctx->context);
 		ret = sendmsg(ctx->sock, &msg, 0);
 		if (ret < 0) {
 			fprintf(stderr, "Couldn't share fd. ret %d\n", ret);
@@ -515,7 +514,6 @@ static struct pingpong_context *pp_init_ctx(struct ibv_device *ib_dev,
 					    int port)
 {
 	struct pingpong_context *ctx;
-	int ret;
 
 	ctx = calloc(1, sizeof *ctx);
 	if (!ctx)
@@ -545,12 +543,6 @@ static struct pingpong_context *pp_init_ctx(struct ibv_device *ib_dev,
 		ctx->channel = NULL;
 
 	if (is_server) {
-		ctx->shared_context = ibv_open_device(ib_dev);
-		if (!ctx->shared_context) {
-			fprintf(stderr, "Couldn't get shared context for %s\n",
-				ibv_get_device_name(ib_dev));
-			goto err;
-		}
 
 		if (pp_setup_shm(ctx))
 			goto err;
@@ -561,15 +553,7 @@ static struct pingpong_context *pp_init_ctx(struct ibv_device *ib_dev,
 			goto err;
 		}
 
-		ret = ibv_export_to_fd(ibv_context_to_fd(ctx->shared_context),
-				       &ctx->shm->shared_pd,
-				       ctx->context,
-				       UVERBS_OBJECT_PD,
-				       ibv_pd_to_handle(ctx->pd));
-		if (ret) {
-			fprintf(stderr, "Couldn't export PD to fd. ret %d\n", ret);
-			goto err;
-		}
+		ctx->shm->shared_pd = ibv_pd_to_handle(ctx->pd);
 
 #define PAGE_ALIGN(addr, page) (uintptr_t)(((uintptr_t)addr + page - 1) \
 					 & ~(page - 1))
@@ -584,15 +568,7 @@ static struct pingpong_context *pp_init_ctx(struct ibv_device *ib_dev,
 			goto err;
 		}
 
-		ret = ibv_export_to_fd(ibv_context_to_fd(ctx->shared_context),
-				       &ctx->shm->shared_mr,
-				       ctx->context,
-				       UVERBS_OBJECT_MR,
-				       ibv_mr_to_handle(ctx->mr));
-		if (ret) {
-			fprintf(stderr, "Couldn't export MR to fd. ret %d\n", ret);
-			goto err;
-		}
+		ctx->shm->shared_mr = ibv_mr_to_handle(ctx->mr);
 
 		/* all details initialized ready to go */
 		ctx->shm->status = 2;
@@ -679,8 +655,6 @@ err:
 		ibv_dereg_mr(ctx->mr);
 	if (ctx->pd)
 		ibv_dealloc_pd(ctx->pd);
-	if (ctx->shared_context)
-		ibv_close_device(ctx->shared_context);
 	if (ctx->channel)
 		ibv_destroy_comp_channel(ctx->channel);
 	if (ctx->context)
@@ -1118,10 +1092,6 @@ int main(int argc, char *argv[])
 	}
 
 	ibv_ack_cq_events(ctx->cq, num_cq_events);
-
-	if (ctx->shared_context)
-		if (ibv_close_device(ctx->shared_context))
-			fprintf(stderr, "Couldn't close shared context\n");
 
 	if (pp_close_ctx(ctx))
 		fprintf(stderr, "Couldn't close context\n");
