@@ -667,7 +667,17 @@ err:
 
 static int pp_close_ctx(struct pingpong_context *ctx)
 {
-	int ret, count;
+	if (pp_delete_shm(ctx)) {
+		fprintf(stderr, "couldn't destroy shared memory\n");
+		return 1;
+	}
+
+	if (ctx->channel) {
+		if (ibv_destroy_comp_channel(ctx->channel)) {
+			fprintf(stderr, "Couldn't destroy completion channel\n");
+			return 1;
+		}
+	}
 
 	if (ibv_destroy_qp(ctx->qp)) {
 		fprintf(stderr, "Couldn't destroy QP\n");
@@ -679,31 +689,14 @@ static int pp_close_ctx(struct pingpong_context *ctx)
 		return 1;
 	}
 
-	if (ctx->is_server) {
-		if (ibv_dereg_mr(ctx->mr)) {
-			fprintf(stderr, "Couldn't deregister MR\n");
-			return 1;
-		}
-	}
-
-	if (pp_delete_shm(ctx)) {
-		fprintf(stderr, "couldn't destroy shared memory\n");
+	if (ibv_dereg_mr(ctx->mr)) {
+		fprintf(stderr, "Couldn't deregister MR\n");
 		return 1;
 	}
 
-	for (count = 10, ret = 1; count > 0 && ret; count--) {
-		if ((ret = ibv_dealloc_pd(ctx->pd))) {
-			fprintf(stderr, "Couldn't deallocate PD, Error %d. Retry in 3 sec...\n", ret);
-			sleep(3);
-		}
-	}
-	fprintf(stderr, "PD deallocated...\n");
-
-	if (ctx->channel) {
-		if (ibv_destroy_comp_channel(ctx->channel)) {
-			fprintf(stderr, "Couldn't destroy completion channel\n");
-			return 1;
-		}
+	if (ibv_dealloc_pd(ctx->pd)) {
+		fprintf(stderr, "Couldn't deallocate PD\n");
+		return 1;
 	}
 
 	if (ibv_close_device(ctx->context)) {
