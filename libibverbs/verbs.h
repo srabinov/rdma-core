@@ -1929,10 +1929,6 @@ struct ibv_context_ops {
 	void *(*_compat_attach_mcast)(void);
 	void *(*_compat_detach_mcast)(void);
 	void *(*_compat_async_event)(void);
-	struct ibv_pd *(*import_pd)(struct ibv_context *context, uint32_t fd,
-				    uint32_t handle);
-	struct ibv_pd *(*import_mr)(struct ibv_context *context, uint32_t fd,
-				    uint32_t handle);
 };
 
 struct ibv_context {
