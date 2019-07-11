@@ -3,13 +3,16 @@
 .\"
 .TH IBV_REG_MR 3 2006-10-31 libibverbs "Libibverbs Programmer's Manual"
 .SH "NAME"
-ibv_reg_mr, ibv_dereg_mr \- register or deregister a memory region (MR)
+ibv_reg_mr, ibv_import_mr, ibv_dereg_mr \- register, import or deregister a memory region (MR)
 .SH "SYNOPSIS"
 .nf
 .B #include <infiniband/verbs.h>
 .sp
 .BI "struct ibv_mr *ibv_reg_mr(struct ibv_pd " "*pd" ", void " "*addr" ,
 .BI "                          size_t " "length" ", int " "access" );
+.sp
+.BI "struct ibv_mr *ibv_import_mr(struct ibv_context " "*context" ",
+.BI "                             uint32_t" " fd" ", uint32_t" " handle" );
 .sp
 .BI "int ibv_dereg_mr(struct ibv_mr " "*mr" );
 .fi
@@ -52,6 +55,14 @@ Local read access is always enabled for the MR.
 .PP
 To create an implicit ODP MR, IBV_ACCESS_ON_DEMAND should be set, addr should be 0 and length should be SIZE_MAX.
 .PP
+.B ibv_import_mr()
+imports MR identified by
+.I handle\fR
+from context identified by file descriptor
+.I fd\fR
+to device context
+.I context\fR.
+.PP
 .B ibv_dereg_mr()
 deregisters the MR
 .I mr\fR.
@@ -68,9 +79,16 @@ is used by remote processes to perform Atomic and RDMA operations.  The remote p
 .B rkey
 as the rkey field of struct ibv_send_wr passed to the ibv_post_send function.
 .PP
+.B ibv_import_mr()
+returns a pointer to the imported MR, or NULL if the request fails.
+.PP
 .B ibv_dereg_mr()
 returns 0 on success, or the value of errno on failure (which indicates the failure reason).
 .SH "NOTES"
+.B ibv_import_mr()
+once MR is imported the process which created it stays on hold until all
+reference to it are deallocated (MR can be imported more than once).
+.PP
 .B ibv_dereg_mr()
 fails if any memory window is still bound to this MR.
 .SH "SEE ALSO"
